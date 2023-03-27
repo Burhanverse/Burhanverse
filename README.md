@@ -15,8 +15,7 @@ I am currently a student.<br>A typical weebo.<br>Coding is just one of my hobbie
 ## 🏆 GitHub Trophies
 ![](https://github-profile-trophy.vercel.app/?username=Burhanverse&theme=discord&no-frame=false&no-bg=true&margin-w=4)
 
-### 😂 Random Dev Meme
-<img src="https://random-memer.herokuapp.com/" width="512px"/>
+
 
 ---
 [![](https://visitcount.itsvg.in/api?id=Burhanverse&icon=6&color=1)](https://visitcount.itsvg.in)
