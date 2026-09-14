@@ -57,6 +57,17 @@ const navItems = [
 </template>
 
 <style scoped>
+/* =============================================================================
+   FROSTED GLASS CONFIGURATION (EASILY ADJUSTABLE)
+   These variables configure the frosted glass blur intensity, saturation,
+   and translucent surface tinting for both desktop and mobile floating navs.
+   You can adjust --nav-glass-blur here or in src/style/variables.css.
+   ============================================================================= */
+:root {
+  --nav-glass-blur: 24px;              /* Adjust blur intensity (e.g. 12px, 20px, 32px) */
+  --nav-glass-saturate: 180%;          /* Adjust saturation behind glass (100% - 200%) */
+}
+
 /* ==========================================================================
    DESKTOP / TABLET VERTICAL DOCK (MATCHING USER MOCKUP EXACTLY)
    ========================================================================== */
@@ -71,25 +82,26 @@ const navItems = [
   align-items: center;
 }
 
-/* Background on nav buttons group */
+/* Background on nav buttons group with Frosted Glass */
 .dock-floating-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.4rem;
   padding: 1.2rem 0.8rem;
-  background: var(--md-sys-color-surface-container, rgba(255, 248, 245, 0.92));
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(191, 96, 56, 0.14);
+  background: var(--nav-glass-bg, rgba(255, 248, 245, 0.72));
+  backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
+  -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
+  border: 1px solid var(--nav-glass-border, rgba(191, 96, 56, 0.18));
   border-radius: 9999px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6));
+  transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
 }
 
 [theme="dark"] .dock-floating-column {
-  background: var(--md-sys-color-surface-container, rgba(38, 27, 22, 0.92));
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  background: var(--nav-glass-bg, rgba(38, 27, 22, 0.72));
+  border: 1px solid var(--nav-glass-border, rgba(255, 255, 255, 0.12));
+  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12));
 }
 
 /* Individual launcher buttons */
@@ -166,70 +178,89 @@ const navItems = [
 }
 
 /* ==========================================================================
-   GOOGLE PIXEL MOBILE MATERIAL 3 BOTTOM NAVIGATION BAR (80PX SPEC)
+   MOBILE FLOATING MATERIAL 3 NAVIGATION DOCK
+   Floats centered above the bottom edge with a pill-shaped frosted glass shell,
+   matching the desktop floating launcher dock aesthetic.
    ========================================================================== */
 .m3-bottom-nav-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(8rem + env(safe-area-inset-bottom, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: var(--md-sys-color-surface-container, rgba(255, 248, 245, 0.94));
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid var(--md-sys-color-outline-variant, rgba(191, 96, 56, 0.12));
+  bottom: calc(1.4rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3.2rem);
+  max-width: 42rem;
+  height: 6.8rem;
+  padding: 0 0.6rem;
+  border-radius: 9999px;
+  background: var(--nav-glass-bg, rgba(255, 248, 245, 0.72));
+  backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
+  -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
+  border: 1px solid var(--nav-glass-border, rgba(191, 96, 56, 0.18));
+  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6));
   display: flex;
   align-items: center;
   justify-content: space-around;
   z-index: 100;
-  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
+              background-color 250ms ease,
+              border-color 250ms ease,
+              box-shadow 250ms ease;
 }
 
 [theme="dark"] .m3-bottom-nav-bar {
-  background: var(--md-sys-color-surface-container, rgba(38, 27, 22, 0.94));
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.4);
+  background: var(--nav-glass-bg, rgba(38, 27, 22, 0.72));
+  border: 1px solid var(--nav-glass-border, rgba(255, 255, 255, 0.12));
+  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12));
 }
 
 .m3-nav-destination {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.4rem 1.2rem;
+  padding: 0.4rem 0.6rem;
   color: var(--md-sys-color-on-surface-variant, #52443d);
-  transition: color 200ms ease;
+  transition: color 200ms ease, transform 150ms ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  flex: 1;
+  max-width: 9.5rem;
+}
+
+.m3-nav-destination:active {
+  transform: scale(0.94);
 }
 
 .m3-nav-icon-container {
   position: relative;
-  width: 6.4rem;
-  height: 3.2rem;
+  width: 5.6rem;
+  height: 3rem;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 250ms ease,
+              transform 200ms ease;
   overflow: hidden;
 }
 
 .m3-nav-icon {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   transition: font-variation-settings 200ms ease, transform 200ms ease, color 200ms ease;
 }
 
 .m3-nav-label {
   font-family: var(--font-sans, "Google Sans Flex", "Inter", sans-serif);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   transition: font-weight 200ms ease, color 200ms ease;
+  white-space: nowrap;
 }
 
 /* Active destination state */
@@ -239,30 +270,50 @@ const navItems = [
 
 .m3-nav-destination.selected .m3-nav-icon-container {
   background-color: #ffd2b8;
-  box-shadow: 0 1px 4px rgba(191, 96, 56, 0.18);
+  box-shadow: 0 2px 6px rgba(191, 96, 56, 0.22);
 }
 
 [theme="dark"] .m3-nav-destination.selected .m3-nav-icon-container {
   background-color: #723214;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .m3-nav-destination.selected .m3-nav-icon {
   color: #3b1404;
   font-variation-settings: "FILL" 1, "wght" 600;
+  transform: scale(1.05);
 }
 
 [theme="dark"] .m3-nav-destination.selected .m3-nav-icon {
   color: #ffdccf;
   font-variation-settings: "FILL" 1, "wght" 600;
+  transform: scale(1.05);
 }
 
 .m3-nav-destination.selected .m3-nav-label {
   font-weight: 700;
-  color: #221a16;
+  color: var(--md-sys-color-on-surface, #221a16);
 }
 
 [theme="dark"] .m3-nav-destination.selected .m3-nav-label {
   color: #ede0db;
+}
+
+@media (max-width: 360px) {
+  .m3-bottom-nav-bar {
+    width: calc(100% - 2rem);
+    height: 6.4rem;
+    padding: 0 0.4rem;
+  }
+  .m3-nav-icon-container {
+    width: 4.8rem;
+    height: 2.8rem;
+  }
+  .m3-nav-icon {
+    font-size: 2rem;
+  }
+  .m3-nav-label {
+    font-size: 1.05rem;
+  }
 }
 </style>

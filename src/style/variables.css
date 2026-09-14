@@ -134,6 +134,17 @@
   --md-sys-color-dock-btn-active: #984b22;
   --md-sys-color-dock-icon: #ffffff;
 
+  /* ==========================================================================
+     FROSTED GLASS NAVIGATION TOKENS (EASILY ADJUSTABLE)
+     Tweak --nav-glass-blur to increase or decrease blur strength (e.g. 16px, 24px, 36px).
+     Tweak --nav-glass-bg to adjust the translucency of the glass surface tint.
+     ========================================================================== */
+  --nav-glass-blur: 24px;
+  --nav-glass-saturate: 180%;
+  --nav-glass-bg: rgba(255, 248, 245, 0.72);
+  --nav-glass-border: rgba(191, 96, 56, 0.18);
+  --nav-glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+
   --github-bg: #24292f;
   --github-text: #ffffff;
   --devto-bg: #0a0a0a;
@@ -200,6 +211,12 @@
   --md-sys-color-dock-btn-active: #984b22;
   --md-sys-color-dock-icon: #ffffff;
 
+  --nav-glass-blur: 24px;
+  --nav-glass-saturate: 180%;
+  --nav-glass-bg: rgba(255, 248, 245, 0.72);
+  --nav-glass-border: rgba(191, 96, 56, 0.18);
+  --nav-glass-shadow: 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+
   --github-bg: #24292f;
   --github-text: #ffffff;
   --devto-bg: #0a0a0a;
@@ -265,6 +282,12 @@
   --md-sys-color-dock-btn: #c76d48;
   --md-sys-color-dock-btn-active: #ffb593;
   --md-sys-color-dock-icon: #ffffff;
+
+  --nav-glass-blur: 24px;
+  --nav-glass-saturate: 180%;
+  --nav-glass-bg: rgba(38, 27, 22, 0.72);
+  --nav-glass-border: rgba(255, 255, 255, 0.12);
+  --nav-glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12);
 
   --github-bg: #161b22;
   --github-text: #f0f6fc;

@@ -218,7 +218,7 @@ watch(currentTab, (newTab) => {
 
 .is-mobile-device .homescreen-content-scroller {
   padding-top: calc(4.2rem + env(safe-area-inset-top, 0));
-  padding-bottom: calc(9.4rem + env(safe-area-inset-bottom, 0));
+  padding-bottom: calc(9.8rem + env(safe-area-inset-bottom, 0));
   height: 100dvh;
 }
 
