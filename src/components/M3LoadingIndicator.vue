@@ -75,11 +75,12 @@ const strokeWidth = computed(() => {
 
 <style scoped>
 .m3-progress-indicator-root {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.4rem;
+  width: 100%;
   user-select: none;
 }
 

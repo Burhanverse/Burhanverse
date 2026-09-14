@@ -390,6 +390,19 @@ onMounted(() => {
   color: var(--md-sys-color-tertiary, #927014);
 }
 
+/* Loading State */
+.widget-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 16rem;
+  padding: 1.6rem 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .stats-widgets-grid {
     grid-template-columns: 1fr;
