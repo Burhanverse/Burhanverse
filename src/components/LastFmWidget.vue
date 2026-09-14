@@ -83,14 +83,24 @@ onUnmounted(() => {
   <div
     class="lastfm-scrobble-pill"
     :class="{ 'is-now-playing': isNowPlaying }"
-    :title="isNowPlaying ? 'Currently playing on Last.fm • Click to open' : (track?.playedAt ? `Scrobbled ${track.playedAt} • Click to open` : 'Click to open on Last.fm')"
+    :title="
+      isNowPlaying
+        ? 'Currently playing on Last.fm • Click to open'
+        : track?.playedAt
+          ? `Scrobbled ${track.playedAt} • Click to open`
+          : 'Click to open on Last.fm'
+    "
     @click="openTrack"
   >
     <md-ripple></md-ripple>
 
     <div class="pill-artwork-wrapper">
       <div class="scallop-mask-container">
-        <svg class="pill-scallop-svg" viewBox="-4 -4 328 328" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          class="pill-scallop-svg"
+          viewBox="-4 -4 328 328"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
             <clipPath id="scallopCoverMask">
               <path
@@ -117,7 +127,13 @@ onUnmounted(() => {
           />
 
           <g v-else clip-path="url(#scallopCoverMask)">
-            <rect x="-4" y="-4" width="328" height="328" class="scallop-fallback-rect" />
+            <rect
+              x="-4"
+              y="-4"
+              width="328"
+              height="328"
+              class="scallop-fallback-rect"
+            />
             <circle cx="160" cy="160" r="44" fill="rgba(255, 255, 255, 0.2)" />
             <path
               d="M152 136v40.55c-2.4-.95-5.1-1.55-8-1.55-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20V152h24v-16h-36z"
@@ -148,7 +164,7 @@ onUnmounted(() => {
           Now Playing
         </span>
         <span v-else class="pill-live-badge recently-played">
-          {{ track?.playedAt || 'Last Played' }}
+          {{ track?.playedAt || "Last Played" }}
         </span>
       </div>
 
@@ -163,7 +179,11 @@ onUnmounted(() => {
       type="button"
       class="pill-play-btn"
       :class="{ 'playing-btn': isNowPlaying }"
-      :title="isNowPlaying ? 'Currently playing on Last.fm • Click to view track' : 'Last scrobbled track • Click to view on Last.fm'"
+      :title="
+        isNowPlaying
+          ? 'Currently playing on Last.fm • Click to view track'
+          : 'Last scrobbled track • Click to view on Last.fm'
+      "
       @click.stop="openTrack"
     >
       <div v-if="isNowPlaying" class="icon-slot" v-html="pauseIcon"></div>
@@ -184,12 +204,18 @@ onUnmounted(() => {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.16);
   border-radius: 9999px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   user-select: none;
   max-width: 34rem;
   width: 100%;
-  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 250ms ease, background-color 250ms ease, border-color 250ms ease;
+  transition:
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 250ms ease,
+    background-color 250ms ease,
+    border-color 250ms ease;
   overflow: hidden;
 }
 
@@ -339,13 +365,26 @@ onUnmounted(() => {
   animation: barBounce 1s ease-in-out infinite alternate;
 }
 
-.bar-1 { height: 50%; animation-delay: 0ms; }
-.bar-2 { height: 100%; animation-delay: 200ms; }
-.bar-3 { height: 60%; animation-delay: 400ms; }
+.bar-1 {
+  height: 50%;
+  animation-delay: 0ms;
+}
+.bar-2 {
+  height: 100%;
+  animation-delay: 200ms;
+}
+.bar-3 {
+  height: 60%;
+  animation-delay: 400ms;
+}
 
 @keyframes barBounce {
-  from { height: 20%; }
-  to { height: 100%; }
+  from {
+    height: 20%;
+  }
+  to {
+    height: 100%;
+  }
 }
 
 .pill-artist-name {
@@ -373,7 +412,10 @@ onUnmounted(() => {
   flex-shrink: 0;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(191, 96, 56, 0.25);
-  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), background-color 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .pill-play-btn:hover {

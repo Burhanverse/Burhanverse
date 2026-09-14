@@ -27,7 +27,10 @@ function initTheme() {
   const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
   if (savedTheme) {
     theme.value = savedTheme;
-  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  } else if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
     theme.value = "dark";
   } else {
     theme.value = "light";
@@ -45,7 +48,11 @@ function navigate(tab: "home" | "repos" | "blog" | "contact") {
   currentTab.value = tab;
   currentArticleSlug.value = "";
   document.documentElement.setAttribute("data-tab", tab);
-  window.history.pushState({ tab }, "", tab === "home" ? "/" : `/?section=${tab}`);
+  window.history.pushState(
+    { tab },
+    "",
+    tab === "home" ? "/" : `/?section=${tab}`,
+  );
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -66,7 +73,10 @@ function parseUrl() {
     currentArticleSlug.value = article;
     currentTab.value = "article";
     document.documentElement.setAttribute("data-tab", "blog");
-  } else if (section && ["home", "repos", "blog", "contact", "about"].includes(section)) {
+  } else if (
+    section &&
+    ["home", "repos", "blog", "contact", "about"].includes(section)
+  ) {
     const tab = (section === "about" ? "contact" : section) as TabId;
     currentTab.value = tab;
     document.documentElement.setAttribute("data-tab", tab);
@@ -91,12 +101,18 @@ onUnmounted(() => {
 });
 
 watch(currentTab, (newTab) => {
-  document.documentElement.setAttribute("data-tab", newTab === "article" ? "blog" : newTab);
+  document.documentElement.setAttribute(
+    "data-tab",
+    newTab === "article" ? "blog" : newTab,
+  );
 });
 </script>
 
 <template>
-  <div class="tablet-viewport-shell" :class="[theme, { 'is-mobile-device': isMobile }]">
+  <div
+    class="tablet-viewport-shell"
+    :class="[theme, { 'is-mobile-device': isMobile }]"
+  >
     <!-- Cozy Study Room Wallpaper Background -->
     <div class="homescreen-wallpaper-bg"></div>
     <div class="wallpaper-ambient-scrim"></div>
@@ -125,10 +141,7 @@ watch(currentTab, (newTab) => {
           :key="currentTab"
           :is-mobile="isMobile"
         />
-        <ReposPage
-          v-else-if="currentTab === 'repos'"
-          :key="currentTab"
-        />
+        <ReposPage v-else-if="currentTab === 'repos'" :key="currentTab" />
         <BlogPage
           v-else-if="currentTab === 'blog'"
           :key="currentTab"
@@ -140,10 +153,7 @@ watch(currentTab, (newTab) => {
           :article-slug="currentArticleSlug"
           @back-to-blog="navigate('blog')"
         />
-        <ContactPage
-          v-else-if="currentTab === 'contact'"
-          :key="currentTab"
-        />
+        <ContactPage v-else-if="currentTab === 'contact'" :key="currentTab" />
       </Transition>
     </main>
   </div>
@@ -185,13 +195,21 @@ watch(currentTab, (newTab) => {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 240, 220, 0.05) 0%, rgba(30, 20, 10, 0.25) 100%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 240, 220, 0.05) 0%,
+    rgba(30, 20, 10, 0.25) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
 
 [theme="dark"] .wallpaper-ambient-scrim {
-  background: radial-gradient(circle at 30% 30%, rgba(0, 0, 0, 0.1) 0%, rgba(10, 8, 6, 0.5) 100%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(10, 8, 6, 0.5) 100%
+  );
 }
 
 /* Content Scroller */
@@ -234,7 +252,9 @@ watch(currentTab, (newTab) => {
 /* Page Transition */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: opacity 280ms cubic-bezier(0.4, 0, 0.2, 1), transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-slide-enter-from {

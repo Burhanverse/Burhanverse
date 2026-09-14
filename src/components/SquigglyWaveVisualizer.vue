@@ -11,7 +11,7 @@ const props = withDefaults(
     isPlaying: false,
     height: 16,
     speed: 1.45,
-  }
+  },
 );
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -20,7 +20,7 @@ let resizeObserver: ResizeObserver | null = null;
 let resizeTimeout: number | null = null;
 let lastTimestamp: number | null = null;
 
-const wavelength = 36; 
+const wavelength = 36;
 const maxAmplitude = 3.2;
 let currentAmplitude = props.isPlaying ? maxAmplitude : 0;
 let phase = 0;
@@ -37,12 +37,18 @@ function draw(timestamp: number) {
 
   if (width === 0 || height === 0) return;
 
-  if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
+  if (
+    canvas.width !== Math.round(width * dpr) ||
+    canvas.height !== Math.round(height * dpr)
+  ) {
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
   }
 
-  const dt = lastTimestamp !== null ? Math.min((timestamp - lastTimestamp) / 1000, 0.05) : 0.016;
+  const dt =
+    lastTimestamp !== null
+      ? Math.min((timestamp - lastTimestamp) / 1000, 0.05)
+      : 0.016;
   lastTimestamp = timestamp;
 
   ctx.save();
@@ -54,10 +60,13 @@ function draw(timestamp: number) {
   const endX = width - 8;
 
   const computedStyle = getComputedStyle(canvas);
-  const primaryColor = computedStyle.getPropertyValue("--md-sys-color-primary").trim() || "#bf6038";
+  const primaryColor =
+    computedStyle.getPropertyValue("--md-sys-color-primary").trim() ||
+    "#bf6038";
 
   const targetAmplitude = props.isPlaying ? maxAmplitude : 0;
-  currentAmplitude += (targetAmplitude - currentAmplitude) * (1 - Math.exp(-8 * dt));
+  currentAmplitude +=
+    (targetAmplitude - currentAmplitude) * (1 - Math.exp(-8 * dt));
 
   if (props.isPlaying || currentAmplitude > 0.02) {
     phase += props.speed * dt;
@@ -70,7 +79,11 @@ function draw(timestamp: number) {
   for (let x = 0; x <= totalLength; x += step) {
     const px = startX + x;
     const taper = Math.min(x / 14, (totalLength - x) / 14, 1);
-    const py = cy + currentAmplitude * taper * Math.sin(x * (2 * Math.PI / wavelength) - phase);
+    const py =
+      cy +
+      currentAmplitude *
+        taper *
+        Math.sin(x * ((2 * Math.PI) / wavelength) - phase);
     if (x === 0) {
       ctx.moveTo(px, py);
     } else {
@@ -105,7 +118,7 @@ watch(
   () => props.isPlaying,
   () => {
     startAnimation();
-  }
+  },
 );
 
 onMounted(() => {

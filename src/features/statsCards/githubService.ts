@@ -360,8 +360,18 @@ export async function fetchGitHubOverview(
 }
 
 const MONTH_NAMES = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 function processContributionDays(
@@ -386,7 +396,9 @@ function processContributionDays(
 
   const paddedDays: ContributionDay[] = [];
   for (let i = 0; i < startDayOfWeek; i++) {
-    const padDate = new Date(firstDate.getTime() - (startDayOfWeek - i) * 86400000);
+    const padDate = new Date(
+      firstDate.getTime() - (startDayOfWeek - i) * 86400000,
+    );
     paddedDays.push({
       date: padDate.toISOString().split("T")[0],
       count: 0,
@@ -427,7 +439,10 @@ function processContributionDays(
     const midDay = week.days[3] || week.days[0];
     if (midDay && midDay.date) {
       const monthNum = new Date(midDay.date).getMonth();
-      if (monthNum !== lastMonthIndex && (wIndex - (months[months.length - 1]?.firstWeekIndex ?? -5)) >= 3) {
+      if (
+        monthNum !== lastMonthIndex &&
+        wIndex - (months[months.length - 1]?.firstWeekIndex ?? -5) >= 3
+      ) {
         months.push({
           name: MONTH_NAMES[monthNum],
           firstWeekIndex: wIndex,
@@ -442,7 +457,9 @@ function processContributionDays(
   let runningStreak = 0;
 
   const todayStr = new Date().toISOString().split("T")[0];
-  const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+  const yesterdayStr = new Date(Date.now() - 86400000)
+    .toISOString()
+    .split("T")[0];
 
   for (const d of days) {
     if (d.count > 0) {
@@ -469,7 +486,10 @@ function processContributionDays(
   const totalCalculated = days.reduce((sum, d) => sum + d.count, 0);
 
   return {
-    totalContributions: totalContributionsOverride && totalContributionsOverride > 0 ? totalContributionsOverride : totalCalculated,
+    totalContributions:
+      totalContributionsOverride && totalContributionsOverride > 0
+        ? totalContributionsOverride
+        : totalCalculated,
     weeks,
     months,
     currentStreak: currentStreak || 0,
@@ -477,11 +497,15 @@ function processContributionDays(
   };
 }
 
-export async function fetchGitHubCalendarData(username: string): Promise<ContributionCalendarData | null> {
+export async function fetchGitHubCalendarData(
+  username: string,
+): Promise<ContributionCalendarData | null> {
   try {
-    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+    const res = await fetch(
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
+    );
     if (!res.ok) throw new Error(`Contributions API status ${res.status}`);
-    const data = await res.json() as {
+    const data = (await res.json()) as {
       total?: Record<string, number>;
       contributions?: Array<{ date: string; count: number; level: number }>;
     };
@@ -490,9 +514,16 @@ export async function fetchGitHubCalendarData(username: string): Promise<Contrib
       const days: ContributionDay[] = data.contributions.map((c) => ({
         date: c.date,
         count: c.count,
-        level: (c.level >= 0 && c.level <= 4 ? c.level : (c.count > 0 ? 1 : 0)) as 0 | 1 | 2 | 3 | 4,
+        level: (c.level >= 0 && c.level <= 4
+          ? c.level
+          : c.count > 0
+            ? 1
+            : 0) as 0 | 1 | 2 | 3 | 4,
       }));
-      const total = data.total?.["lastYear"] || Object.values(data.total || {})[0] || days.reduce((sum, d) => sum + d.count, 0);
+      const total =
+        data.total?.["lastYear"] ||
+        Object.values(data.total || {})[0] ||
+        days.reduce((sum, d) => sum + d.count, 0);
       return processContributionDays(days, total);
     }
     return null;
@@ -502,11 +533,15 @@ export async function fetchGitHubCalendarData(username: string): Promise<Contrib
   }
 }
 
-export async function fetchGitHubRecentEvents(username: string): Promise<GitHubActivityEvent[]> {
+export async function fetchGitHubRecentEvents(
+  username: string,
+): Promise<GitHubActivityEvent[]> {
   try {
-    const res = await fetch(`https://api.github.com/users/${username}/events?per_page=12`);
+    const res = await fetch(
+      `https://api.github.com/users/${username}/events?per_page=12`,
+    );
     if (!res.ok) throw new Error(`GitHub events API status ${res.status}`);
-    const rawEvents = await res.json() as any[];
+    const rawEvents = (await res.json()) as any[];
 
     if (!Array.isArray(rawEvents) || rawEvents.length === 0) {
       return [];
@@ -519,18 +554,26 @@ export async function fetchGitHubRecentEvents(username: string): Promise<GitHubA
 
       if (ev.type === "PushEvent") {
         commitCount = ev.payload?.commits?.length || 1;
-        commitMessage = ev.payload?.commits?.[0]?.message || "Pushed code changes";
-        branch = ev.payload?.ref ? ev.payload.ref.replace("refs/heads/", "") : "main";
+        commitMessage =
+          ev.payload?.commits?.[0]?.message || "Pushed code changes";
+        branch = ev.payload?.ref
+          ? ev.payload.ref.replace("refs/heads/", "")
+          : "main";
       } else if (ev.type === "CreateEvent") {
-        commitMessage = `Created ${ev.payload?.ref_type || "repository"} ${ev.payload?.ref || ""}`.trim();
+        commitMessage =
+          `Created ${ev.payload?.ref_type || "repository"} ${ev.payload?.ref || ""}`.trim();
       } else if (ev.type === "WatchEvent") {
         commitMessage = "Starred repository";
       } else if (ev.type === "ForkEvent") {
         commitMessage = "Forked repository";
       } else if (ev.type === "IssuesEvent") {
-        commitMessage = ev.payload?.action ? `${ev.payload.action} an issue` : "Updated issue";
+        commitMessage = ev.payload?.action
+          ? `${ev.payload.action} an issue`
+          : "Updated issue";
       } else if (ev.type === "PullRequestEvent") {
-        commitMessage = ev.payload?.action ? `${ev.payload.action} pull request` : "Updated pull request";
+        commitMessage = ev.payload?.action
+          ? `${ev.payload.action} pull request`
+          : "Updated pull request";
       } else if (ev.payload?.action) {
         commitMessage = `${ev.payload.action} event`;
       } else {
@@ -558,4 +601,3 @@ export async function fetchGitHubRecentEvents(username: string): Promise<GitHubA
 export function getFallbackRecentEvents(): GitHubActivityEvent[] {
   return [];
 }
-

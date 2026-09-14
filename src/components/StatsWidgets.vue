@@ -3,7 +3,10 @@ import { ref, onMounted } from "vue";
 import { IconBrandGithub, IconMovie, IconActivity } from "@tabler/icons-vue";
 import { fetchGitHubOverview } from "../features/statsCards/githubService";
 import { fetchAnilistStats } from "../features/statsCards/anilistService";
-import type { GitHubOverview, AnilistStats } from "../features/statsCards/types";
+import type {
+  GitHubOverview,
+  AnilistStats,
+} from "../features/statsCards/types";
 import M3LoadingIndicator from "./M3LoadingIndicator.vue";
 
 const githubData = ref<GitHubOverview | null>(null);
@@ -70,19 +73,23 @@ onMounted(() => {
       <template v-else>
         <div class="stat-grid-metric">
           <div class="stat-metric-card">
-            <span class="metric-num">{{ githubData?.currentStreak ?? '--' }}</span>
+            <span class="metric-num">{{
+              githubData?.currentStreak ?? "--"
+            }}</span>
             <span class="metric-lbl">Day Streak</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ githubData?.totalRepos ?? '--' }}</span>
+            <span class="metric-num">{{ githubData?.totalRepos ?? "--" }}</span>
             <span class="metric-lbl">Repositories</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ githubData?.totalStars ?? '--' }}</span>
+            <span class="metric-num">{{ githubData?.totalStars ?? "--" }}</span>
             <span class="metric-lbl">Stars</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ githubData?.contributions ?? '--' }}</span>
+            <span class="metric-num">{{
+              githubData?.contributions ?? "--"
+            }}</span>
             <span class="metric-lbl">Commits</span>
           </div>
         </div>
@@ -94,7 +101,10 @@ onMounted(() => {
               v-for="lang in githubData.languageStats"
               :key="lang.name"
               class="lang-slice"
-              :style="{ width: `${lang.percentage}%`, backgroundColor: lang.color }"
+              :style="{
+                width: `${lang.percentage}%`,
+                backgroundColor: lang.color,
+              }"
               :title="`${lang.name}: ${lang.percentage}%`"
             ></div>
           </div>
@@ -104,7 +114,10 @@ onMounted(() => {
               :key="lang.name"
               class="lang-item"
             >
-              <span class="lang-circle" :style="{ backgroundColor: lang.color }"></span>
+              <span
+                class="lang-circle"
+                :style="{ backgroundColor: lang.color }"
+              ></span>
               {{ lang.name }} {{ lang.percentage }}%
             </span>
           </div>
@@ -137,26 +150,38 @@ onMounted(() => {
       <template v-else>
         <div class="stat-grid-metric">
           <div class="stat-metric-card">
-            <span class="metric-num">{{ anilistData?.totalCompletedAnime ?? '--' }}</span>
+            <span class="metric-num">{{
+              anilistData?.totalCompletedAnime ?? "--"
+            }}</span>
             <span class="metric-lbl">Completed</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ anilistData?.totalWatchedAnimeEpisodes ?? '--' }}</span>
+            <span class="metric-num">{{
+              anilistData?.totalWatchedAnimeEpisodes ?? "--"
+            }}</span>
             <span class="metric-lbl">Episodes</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ anilistData ? `${anilistData.daysWatched}d` : '--' }}</span>
+            <span class="metric-num">{{
+              anilistData ? `${anilistData.daysWatched}d` : "--"
+            }}</span>
             <span class="metric-lbl">Watch Time</span>
           </div>
           <div class="stat-metric-card">
-            <span class="metric-num">{{ anilistData ? `${Math.round(anilistData.meanScoreAnime)}%` : '--' }}</span>
+            <span class="metric-num">{{
+              anilistData ? `${Math.round(anilistData.meanScoreAnime)}%` : "--"
+            }}</span>
             <span class="metric-lbl">Mean Score</span>
           </div>
         </div>
 
         <div class="anime-vibe-footer">
           <IconActivity :size="16" :stroke-width="1.8" />
-          <span>{{ anilistData ? 'Overview of Anime & Manga stats from AniList' : 'AniList stats temporarily unavailable' }}</span>
+          <span>{{
+            anilistData
+              ? "Overview of Anime & Manga stats from AniList"
+              : "AniList stats temporarily unavailable"
+          }}</span>
         </div>
       </template>
     </article>
@@ -182,8 +207,13 @@ onMounted(() => {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.14);
   border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 250ms ease, border-color 250ms ease;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 250ms ease,
+    border-color 250ms ease;
   overflow: hidden;
 }
 
@@ -277,7 +307,9 @@ onMounted(() => {
   background: rgba(0, 0, 0, 0.035);
   border: 1px solid rgba(191, 96, 56, 0.1);
   border-radius: 1.6rem;
-  transition: background-color 200ms ease, border-color 200ms ease;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 [theme="dark"] .stat-metric-card {

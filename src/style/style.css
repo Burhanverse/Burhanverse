@@ -157,7 +157,7 @@ img {
     color 200ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-.icon-container>a,
+.icon-container > a,
 .change-theme,
 .mobile-change-theme {
   transition: background-color 200ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -186,7 +186,7 @@ a {
   transition: outline-width 50ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-.icon-container>a,
+.icon-container > a,
 .change-theme {
   transition:
     background-color 200ms cubic-bezier(0.42, 0, 0.58, 1),

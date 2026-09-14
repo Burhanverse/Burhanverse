@@ -87,11 +87,11 @@ function updateIndicators(
   });
 
   // Observe all nav items to catch layout position shifts
-  document.querySelectorAll(".mobile-nav-item").forEach(item => {
+  document.querySelectorAll(".mobile-nav-item").forEach((item) => {
     indicatorObserver!.observe(item);
   });
 
-  document.querySelectorAll(".icon-container").forEach(item => {
+  document.querySelectorAll(".icon-container").forEach((item) => {
     indicatorObserver!.observe(item);
   });
 

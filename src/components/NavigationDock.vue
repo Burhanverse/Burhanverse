@@ -48,7 +48,9 @@ const navItems = [
 ];
 
 function isTabActive(id: string) {
-  return props.currentTab === id || (id === "blog" && props.currentTab === "article");
+  return (
+    props.currentTab === id || (id === "blog" && props.currentTab === "article")
+  );
 }
 </script>
 
@@ -104,24 +106,35 @@ function isTabActive(id: string) {
   height: 5.6rem;
   border-radius: 9999px;
   background: var(--nav-glass-bg, rgba(255, 248, 245, 0.76));
-  backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
-  -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
+  backdrop-filter: blur(var(--nav-glass-blur, 24px))
+    saturate(var(--nav-glass-saturate, 180%));
+  -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px))
+    saturate(var(--nav-glass-saturate, 180%));
   border: none;
   outline: none;
-  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08));
+  box-shadow: var(
+    --nav-glass-shadow,
+    0 10px 32px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(191, 96, 56, 0.08)
+  );
   z-index: 100;
   user-select: none;
   box-sizing: border-box;
-  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
-              background-color 250ms ease,
-              box-shadow 250ms ease;
+  transition:
+    transform 250ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 250ms ease,
+    box-shadow 250ms ease;
 }
 
 [theme="dark"] .m3-expressive-dock {
   background: var(--nav-glass-bg, rgba(38, 27, 22, 0.76));
   border: none;
   outline: none;
-  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35));
+  box-shadow: var(
+    --nav-glass-shadow,
+    0 14px 40px rgba(0, 0, 0, 0.55),
+    0 2px 10px rgba(0, 0, 0, 0.35)
+  );
 }
 
 .m3-expressive-dock:focus,
@@ -136,7 +149,7 @@ function isTabActive(id: string) {
    ============================================================================= */
 .m3-dock-item {
   position: relative;
-  width: 5.0rem;
+  width: 5rem;
   height: 4.2rem;
   border-radius: 9999px;
   border: none;
@@ -223,7 +236,7 @@ function isTabActive(id: string) {
   /* Active tab on desktop expands vertically as a pill */
   .m3-dock-item.active {
     width: 4.6rem;
-    height: 7.0rem;
+    height: 7rem;
     border-radius: 9999px;
   }
 }

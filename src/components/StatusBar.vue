@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onUnmounted,
+  markRaw,
+  type Component,
+} from "vue";
 import {
   IconWifi,
   IconWifiOff,
@@ -59,8 +66,14 @@ interface BatteryManager extends EventTarget {
   chargingTime: number;
   dischargingTime: number;
   level: number;
-  addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
-  removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+  ): void;
+  removeEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+  ): void;
 }
 
 const hasBatteryApi = ref<boolean>(false);
@@ -100,7 +113,9 @@ const batteryTitle = computed(() => {
 // =============================================================================
 // Network Information API & Online Status
 // =============================================================================
-const isOnline = ref<boolean>(typeof navigator !== "undefined" ? navigator.onLine : true);
+const isOnline = ref<boolean>(
+  typeof navigator !== "undefined" ? navigator.onLine : true,
+);
 const connectionType = ref<string>("wifi");
 const effectiveType = ref<string>("");
 let networkConnection: any = null;
@@ -146,7 +161,8 @@ function updateNetworkInfo() {
 
 function toggleNetworkType() {
   if (!isOnline.value) return;
-  connectionType.value = connectionType.value === "cellular" ? "wifi" : "cellular";
+  connectionType.value =
+    connectionType.value === "cellular" ? "wifi" : "cellular";
 }
 
 const networkIcon = computed<Component>(() => {
@@ -255,9 +271,11 @@ onUnmounted(() => {
           :size="16"
           :stroke-width="2"
         />
-        <span v-if="isOnline && effectiveType" class="network-text">{{ effectiveType }}</span>
+        <span v-if="isOnline && effectiveType" class="network-text">{{
+          effectiveType
+        }}</span>
       </div>
-      
+
       <div
         class="battery-indicator"
         :class="{ 'icon-only': !hasBatteryApi }"
@@ -266,11 +284,16 @@ onUnmounted(() => {
         <component
           :is="batteryIcon"
           class="status-icon"
-          :class="{ 'is-charging': isCharging, 'is-low': hasBatteryApi && batteryLevel <= 20 }"
+          :class="{
+            'is-charging': isCharging,
+            'is-low': hasBatteryApi && batteryLevel <= 20,
+          }"
           :size="18"
           :stroke-width="2"
         />
-        <span v-if="hasBatteryApi" class="battery-text">{{ batteryLevel }}%</span>
+        <span v-if="hasBatteryApi" class="battery-text"
+          >{{ batteryLevel }}%</span
+        >
       </div>
 
       <button
@@ -279,13 +302,25 @@ onUnmounted(() => {
         :class="[`theme-${theme}`, { 'is-dark': theme === 'dark' }]"
         role="switch"
         :aria-checked="theme === 'dark'"
-        :title="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        :title="
+          theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'
+        "
         @click="emit('toggle-theme')"
       >
         <md-ripple></md-ripple>
         <span class="switch-thumb">
-          <IconSun v-if="theme === 'dark'" class="switch-thumb-icon" :size="14" :stroke-width="2.5" />
-          <IconMoon v-else class="switch-thumb-icon" :size="14" :stroke-width="2.5" />
+          <IconSun
+            v-if="theme === 'dark'"
+            class="switch-thumb-icon"
+            :size="14"
+            :stroke-width="2.5"
+          />
+          <IconMoon
+            v-else
+            class="switch-thumb-icon"
+            :size="14"
+            :stroke-width="2.5"
+          />
         </span>
       </button>
     </div>
@@ -305,7 +340,11 @@ onUnmounted(() => {
   justify-content: space-between;
   z-index: 90;
   user-select: none;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   color: #ffffff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   font-family: "JetBrains Mono", monospace;
@@ -339,7 +378,9 @@ onUnmounted(() => {
 
 .clock-pill-fade-enter-active,
 .clock-pill-fade-leave-active {
-  transition: opacity 240ms cubic-bezier(0.2, 0, 0, 1), transform 240ms cubic-bezier(0.2, 0, 0, 1);
+  transition:
+    opacity 240ms cubic-bezier(0.2, 0, 0, 1),
+    transform 240ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .clock-pill-fade-enter-from,
@@ -408,7 +449,9 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   box-sizing: border-box;
-  transition: background-color 200ms ease, border-color 200ms ease;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 .network-indicator:hover {
@@ -501,10 +544,11 @@ onUnmounted(() => {
   -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background-color 250ms cubic-bezier(0.2, 0, 0, 1),
-              border-color 250ms cubic-bezier(0.2, 0, 0, 1),
-              transform 200ms cubic-bezier(0.2, 0, 0, 1),
-              box-shadow 200ms ease;
+  transition:
+    background-color 250ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 250ms cubic-bezier(0.2, 0, 0, 1),
+    transform 200ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 200ms ease;
 }
 
 .status-theme-switch:hover {
@@ -529,9 +573,10 @@ onUnmounted(() => {
   justify-content: center;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
   transform: translateX(0);
-  transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
-              background-color 250ms cubic-bezier(0.2, 0, 0, 1),
-              color 250ms cubic-bezier(0.2, 0, 0, 1);
+  transition:
+    transform 250ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 250ms cubic-bezier(0.2, 0, 0, 1),
+    color 250ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .switch-thumb-icon {
@@ -545,7 +590,7 @@ onUnmounted(() => {
 }
 
 .theme-dark .switch-thumb {
-  transform: translateX(2.0rem);
+  transform: translateX(2rem);
   background: #ffb68c;
   color: #432200;
 }

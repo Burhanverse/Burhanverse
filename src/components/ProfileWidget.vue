@@ -25,7 +25,8 @@ import { IconArrowUpRight, IconMapPin } from "@tabler/icons-vue";
 
     <!-- Bio / Intro -->
     <p class="profile-bio">
-      Software builder, system explorer, and interface artisan crafting thoughtful open source tools & apps.
+      Software builder, system explorer, and interface artisan crafting
+      thoughtful open source tools & apps.
     </p>
 
     <!-- Social Action Chips -->
@@ -86,8 +87,13 @@ import { IconArrowUpRight, IconMapPin } from "@tabler/icons-vue";
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.14);
   border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 250ms ease, border-color 250ms ease;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 250ms ease,
+    border-color 250ms ease;
   overflow: hidden;
   will-change: transform, box-shadow;
 }

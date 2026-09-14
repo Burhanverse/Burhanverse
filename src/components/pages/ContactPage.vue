@@ -78,12 +78,22 @@ const featuredProjects = [
           </div>
 
           <p class="profile-bio-text">
-            Crafting open-source, desktop tools, and tactile Material Design interfaces.
+            Crafting open-source, desktop tools, and tactile Material Design
+            interfaces.
           </p>
 
           <div class="tech-chips-row">
-            <span v-for="tech in keyTechnologies" :key="tech.name" class="tech-chip">
-              <component :is="tech.icon" class="chip-icon" :size="16" :stroke-width="2" />
+            <span
+              v-for="tech in keyTechnologies"
+              :key="tech.name"
+              class="tech-chip"
+            >
+              <component
+                :is="tech.icon"
+                class="chip-icon"
+                :size="16"
+                :stroke-width="2"
+              />
               {{ tech.name }}
             </span>
           </div>
@@ -112,7 +122,11 @@ const featuredProjects = [
             <div class="project-info-col">
               <div class="project-title-row">
                 <h3 class="project-title">{{ item.title }}</h3>
-                <IconArrowUpRight class="out-arrow" :size="16" :stroke-width="2" />
+                <IconArrowUpRight
+                  class="out-arrow"
+                  :size="16"
+                  :stroke-width="2"
+                />
               </div>
               <p class="project-desc">{{ item.desc }}</p>
             </div>
@@ -139,15 +153,16 @@ const featuredProjects = [
             <IconArrowUpRight class="arrow-icon" :size="16" :stroke-width="2" />
           </a>
 
-          <button
-            type="button"
-            class="connect-btn"
-            @click="copyDiscordHandle"
-          >
+          <button type="button" class="connect-btn" @click="copyDiscordHandle">
             <md-ripple></md-ripple>
             <IconBrandDiscord class="btn-icon" :size="20" :stroke-width="2" />
-            <span>{{ copied ? 'Copied @burhanverse' : 'Discord' }}</span>
-            <IconCheck v-if="copied" class="arrow-icon" :size="16" :stroke-width="2" />
+            <span>{{ copied ? "Copied @burhanverse" : "Discord" }}</span>
+            <IconCheck
+              v-if="copied"
+              class="arrow-icon"
+              :size="16"
+              :stroke-width="2"
+            />
             <IconCopy v-else class="arrow-icon" :size="16" :stroke-width="2" />
           </button>
 
@@ -194,7 +209,9 @@ const featuredProjects = [
   border-radius: 28px;
   padding: 2.8rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  transition: border-color 250ms ease, box-shadow 250ms ease;
+  transition:
+    border-color 250ms ease,
+    box-shadow 250ms ease;
 }
 
 [theme="dark"] .minimal-profile-card {
@@ -377,7 +394,10 @@ const featuredProjects = [
   border: 1px solid var(--md-sys-color-outline-variant, rgba(191, 96, 56, 0.1));
   text-decoration: none;
   overflow: hidden;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
 }
 
 [theme="dark"] .project-card {
@@ -437,7 +457,9 @@ const featuredProjects = [
 .out-arrow {
   font-size: 1.6rem;
   color: var(--md-sys-color-outline, #85736c);
-  transition: transform 200ms ease, color 200ms ease;
+  transition:
+    transform 200ms ease,
+    color 200ms ease;
 }
 
 .project-card:hover .out-arrow {
@@ -475,7 +497,11 @@ const featuredProjects = [
   text-decoration: none;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    background-color 200ms ease;
 }
 
 [theme="dark"] .connect-btn {
@@ -487,7 +513,10 @@ const featuredProjects = [
 .connect-btn:hover {
   transform: translateY(-2px);
   border-color: var(--md-sys-color-primary, #bf6038);
-  background: var(--md-sys-color-surface-container-highest, rgba(0, 0, 0, 0.07));
+  background: var(
+    --md-sys-color-surface-container-highest,
+    rgba(0, 0, 0, 0.07)
+  );
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 

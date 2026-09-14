@@ -69,19 +69,21 @@ const githubToken = env.VITE_GITHUB_TOKEN;
 async function loadDashboard() {
   isLoading.value = true;
   try {
-    const [reposRes, overviewRes, calRes, eventsRes] = await Promise.allSettled([
-      githubApi.fetchAndMergeRepositories(
-        ["Burhanverse", "burhancodes", "fagramdesktop"],
-        {
-          Burhanverse: 8,
-          burhancodes: 8,
-          fagramdesktop: 8,
-        },
-      ),
-      fetchGitHubOverview(githubUser, githubToken),
-      fetchGitHubCalendarData(githubUser),
-      fetchGitHubRecentEvents(githubUser),
-    ]);
+    const [reposRes, overviewRes, calRes, eventsRes] = await Promise.allSettled(
+      [
+        githubApi.fetchAndMergeRepositories(
+          ["Burhanverse", "burhancodes", "fagramdesktop"],
+          {
+            Burhanverse: 8,
+            burhancodes: 8,
+            fagramdesktop: 8,
+          },
+        ),
+        fetchGitHubOverview(githubUser, githubToken),
+        fetchGitHubCalendarData(githubUser),
+        fetchGitHubRecentEvents(githubUser),
+      ],
+    );
 
     if (reposRes.status === "fulfilled") {
       repositories.value = reposRes.value;
@@ -101,7 +103,10 @@ async function loadDashboard() {
       recentEvents.value = eventsRes.value;
     }
   } catch (err) {
-    console.warn("Error loading GitHub dashboard, fallback data populated:", err);
+    console.warn(
+      "Error loading GitHub dashboard, fallback data populated:",
+      err,
+    );
     repositories.value = getFallbackRepos();
   } finally {
     isLoading.value = false;
@@ -113,7 +118,8 @@ function getFallbackRepos() {
     {
       id: 1,
       name: "Burhanverse.github.io",
-      description: "Portfolio built with Material Design 3 and Google Pixel Tablet aesthetic.",
+      description:
+        "Portfolio built with Material Design 3 and Google Pixel Tablet aesthetic.",
       html_url: "https://github.com/Burhanverse/Burhanverse.github.io",
       language: "TypeScript",
       stargazers_count: 32,
@@ -125,7 +131,8 @@ function getFallbackRepos() {
     {
       id: 2,
       name: "fagram-desktop",
-      description: "Modern desktop client crafted with beautiful Material 3 expressive UI.",
+      description:
+        "Modern desktop client crafted with beautiful Material 3 expressive UI.",
       html_url: "https://github.com/fagramdesktop/fagram-desktop",
       language: "TypeScript",
       stargazers_count: 58,
@@ -137,7 +144,8 @@ function getFallbackRepos() {
     {
       id: 3,
       name: "material-you-widgets",
-      description: "Collection of Android 14+ Material You widgets for web and desktop.",
+      description:
+        "Collection of Android 14+ Material You widgets for web and desktop.",
       html_url: "https://github.com/Burhanverse",
       language: "TypeScript",
       stargazers_count: 24,
@@ -149,7 +157,8 @@ function getFallbackRepos() {
     {
       id: 4,
       name: "lofi-desktop-companion",
-      description: "Ambient lofi companion app with Last.fm scrobbler and aesthetic clocks.",
+      description:
+        "Ambient lofi companion app with Last.fm scrobbler and aesthetic clocks.",
       html_url: "https://github.com/Burhanverse",
       language: "Rust",
       stargazers_count: 19,
@@ -161,7 +170,8 @@ function getFallbackRepos() {
     {
       id: 5,
       name: "dracula-md3-syntax",
-      description: "Prism and highlight theme marrying Dracula colors with Material 3 tokens.",
+      description:
+        "Prism and highlight theme marrying Dracula colors with Material 3 tokens.",
       html_url: "https://github.com/Burhanverse",
       language: "CSS",
       stargazers_count: 15,
@@ -173,7 +183,8 @@ function getFallbackRepos() {
     {
       id: 6,
       name: "dotfiles-pixel-edition",
-      description: "Sleek Linux workstation configs themed around Google Material You.",
+      description:
+        "Sleek Linux workstation configs themed around Google Material You.",
       html_url: "https://github.com/Burhanverse",
       language: "Python",
       stargazers_count: 42,
@@ -190,7 +201,9 @@ const filteredRepositories = computed(() => {
 
   if (selectedFilter.value !== "All") {
     list = list.filter(
-      (repo) => repo.language && repo.language.toLowerCase() === selectedFilter.value.toLowerCase(),
+      (repo) =>
+        repo.language &&
+        repo.language.toLowerCase() === selectedFilter.value.toLowerCase(),
     );
   }
 
@@ -200,7 +213,8 @@ const filteredRepositories = computed(() => {
       (repo) =>
         repo.name.toLowerCase().includes(q) ||
         (repo.description && repo.description.toLowerCase().includes(q)) ||
-        (repo.topics && repo.topics.some((t: string) => t.toLowerCase().includes(q))),
+        (repo.topics &&
+          repo.topics.some((t: string) => t.toLowerCase().includes(q))),
     );
   }
 
@@ -226,8 +240,11 @@ function handleDayHover(event: MouseEvent, day: ContributionDay) {
   }
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
   const dateFormatted = formatDateLong(day.date);
-  const countText = day.count === 0 ? "No contributions" : `${day.count} contribution${day.count === 1 ? "" : "s"}`;
-  
+  const countText =
+    day.count === 0
+      ? "No contributions"
+      : `${day.count} contribution${day.count === 1 ? "" : "s"}`;
+
   activeTooltip.value = {
     visible: true,
     text: `${countText} on ${dateFormatted}`,
@@ -263,7 +280,10 @@ function formatRelativeTime(dateStr: string) {
     const diffDays = Math.round(diffHours / 24);
     if (diffDays === 1) return "Yesterday";
     if (diffDays < 30) return `${diffDays}d ago`;
-    return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
   } catch {
     return dateStr;
   }
@@ -291,7 +311,10 @@ const languageColors: Record<string, string> = {
 };
 
 const displayLanguages = computed(() => {
-  if (overview.value?.languageStats && overview.value.languageStats.length > 0) {
+  if (
+    overview.value?.languageStats &&
+    overview.value.languageStats.length > 0
+  ) {
     return overview.value.languageStats;
   }
   if (repositories.value && repositories.value.length > 0) {
@@ -356,457 +379,547 @@ onUnmounted(() => {
   <div class="repos-page-wrapper">
     <!-- Full-Page Loader for ReposPage (Official Material 3 Expressive Morphing Animation) -->
     <div v-if="isLoading" class="repos-fullpage-loader">
-      <M3LoadingIndicator
-        size="large"
-        :contained="true"
-      />
+      <M3LoadingIndicator size="large" :contained="true" />
     </div>
 
     <div v-else class="github-dashboard-view">
-    <!-- Floating Heatmap Tooltip -->
-    <div
-      v-if="activeTooltip.visible"
-      class="heatmap-floating-tooltip"
-      :style="{ left: `${activeTooltip.x}px`, top: `${activeTooltip.y}px` }"
-    >
-      {{ activeTooltip.text }}
-    </div>
-
-    <!-- 1. Hero Profile & Dashboard Header Widget -->
-    <section class="dashboard-hero-widget" aria-label="GitHub Profile Overview">
-      <div class="hero-identity-col">
-        <div class="hero-profile-banner">
-          <div class="avatar-ring-container">
-            <img
-              src="https://github.com/Burhanverse.png"
-              alt="Sid (Burhanverse)"
-              class="hero-avatar"
-            />
-            <span class="avatar-online-dot" title="Actively Shipping Code"></span>
-          </div>
-
-          <div class="hero-info-meta">
-            <div class="hero-name-row">
-              <h1 class="hero-display-name">𝙎𝙞𝙙.</h1>
-              <span class="hero-handle-badge">@{{ githubUser }}</span>
-            </div>
-            <p class="hero-bio-tagline">
-              Software builder, system explorer, and interface artisan crafting thoughtful open source tools & apps.
-            </p>
-            <div class="hero-badges-row">
-              <span class="hero-meta-chip">
-                <IconBuilding class="chip-icon" :size="16" :stroke-width="2" />
-                <span>@fagramdesktop</span>
-              </span>
-              <span class="hero-meta-chip">
-                <IconMapPin class="chip-icon" :size="16" :stroke-width="2" />
-                <span>Assam, India</span>
-              </span>
-              <span class="hero-meta-chip">
-                <IconWorld class="chip-icon" :size="16" :stroke-width="2" />
-                <span>burhanverse.eu.org</span>
-              </span>
-            </div>
-          </div>
-        </div>
+      <!-- Floating Heatmap Tooltip -->
+      <div
+        v-if="activeTooltip.visible"
+        class="heatmap-floating-tooltip"
+        :style="{ left: `${activeTooltip.x}px`, top: `${activeTooltip.y}px` }"
+      >
+        {{ activeTooltip.text }}
       </div>
 
-      <div class="hero-actions-col">
-        <a
-          href="https://github.com/Burhanverse"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="gh-external-btn"
-          title="Open GitHub Profile"
-        >
-          <md-ripple></md-ripple>
-          <IconExternalLink :size="18" :stroke-width="2" />
-          <span>View on GitHub</span>
-        </a>
-
-        <div class="hero-quick-stats">
-          <div class="quick-stat-box">
-            <span class="qs-num">{{ calendarData?.totalContributions ?? (overview?.contributions ?? '—') }}</span>
-            <span class="qs-lbl">Year Commits</span>
-          </div>
-          <div class="quick-stat-box">
-            <span class="qs-num">{{ overview?.totalRepos ?? (repositories.length || '—') }}</span>
-            <span class="qs-lbl">Repositories</span>
-          </div>
-          <div class="quick-stat-box">
-            <span class="qs-num">{{ overview?.totalStars ?? '—' }}</span>
-            <span class="qs-lbl">Stars</span>
-          </div>
-          <div class="quick-stat-box">
-            <span class="qs-num">{{ overview?.followers ?? '—' }}</span>
-            <span class="qs-lbl">Followers</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. Interactive 52-Week Commit Calendar Heatmap Widget -->
-    <section class="dashboard-calendar-widget" aria-label="Commit Activity Calendar">
-      <div class="calendar-widget-header">
-        <div class="cal-title-group">
-          <div class="cal-icon-box">
-            <IconCalendar :size="20" :stroke-width="2" />
-          </div>
-          <div>
-            <h2 class="cal-title">Contribution Activity</h2>
-            <span v-if="calendarData?.totalContributions != null" class="cal-subtitle">
-              {{ calendarData.totalContributions }} contributions in the last 365 days
-            </span>
-            <span v-else class="cal-subtitle">
-              GitHub contribution timeline
-            </span>
-          </div>
-        </div>
-
-        <div class="streak-badges-cluster">
-          <div class="streak-badge-pill current-streak">
-            <IconFlame class="streak-icon" :size="18" :stroke-width="2" />
-            <span class="streak-val">{{ calendarData?.currentStreak != null ? `${calendarData.currentStreak} Days` : '—' }}</span>
-            <span class="streak-lbl">Current Streak</span>
-          </div>
-          <div class="streak-badge-pill longest-streak">
-            <IconBolt class="streak-icon" :size="18" :stroke-width="2" />
-            <span class="streak-val">{{ calendarData?.longestStreak != null ? `${calendarData.longestStreak} Days` : '—' }}</span>
-            <span class="streak-lbl">Longest Streak</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Calendar Matrix Scroll Container -->
-      <div ref="calendarScrollEl" class="calendar-scroll-wrapper">
-        <div class="calendar-matrix-board">
-          <!-- Month Header Row -->
-          <div class="calendar-months-row">
-            <span class="month-label-spacer"></span>
-            <div class="months-labels-track">
+      <!-- 1. Hero Profile & Dashboard Header Widget -->
+      <section
+        class="dashboard-hero-widget"
+        aria-label="GitHub Profile Overview"
+      >
+        <div class="hero-identity-col">
+          <div class="hero-profile-banner">
+            <div class="avatar-ring-container">
+              <img
+                src="https://github.com/Burhanverse.png"
+                alt="Sid (Burhanverse)"
+                class="hero-avatar"
+              />
               <span
-                v-for="(m, mIdx) in calendarData?.months"
-                :key="mIdx"
-                class="month-label-item"
-                :style="{ gridColumnStart: m.firstWeekIndex + 1 }"
-              >
-                {{ m.name }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Heatmap Days Grid -->
-          <div class="calendar-days-layout">
-            <!-- Day of Week Labels (Mon, Wed, Fri) -->
-            <div class="day-of-week-labels">
-              <span class="dow-label"></span>
-              <span class="dow-label">Mon</span>
-              <span class="dow-label"></span>
-              <span class="dow-label">Wed</span>
-              <span class="dow-label"></span>
-              <span class="dow-label">Fri</span>
-              <span class="dow-label"></span>
+                class="avatar-online-dot"
+                title="Actively Shipping Code"
+              ></span>
             </div>
 
-            <!-- 52/53 Week Columns -->
-            <div class="calendar-weeks-columns">
-              <div
-                v-for="(week, wIdx) in calendarData?.weeks"
-                :key="wIdx"
-                class="calendar-week-col"
-              >
-                <div
-                  v-for="(day, dIdx) in week.days"
-                  :key="dIdx"
-                  class="calendar-day-cell"
-                  :class="[`level-${day.level}`, { 'empty-cell': !day.date }]"
-                  @mouseenter="handleDayHover($event, day)"
-                  @mouseleave="handleDayLeave"
-                ></div>
+            <div class="hero-info-meta">
+              <div class="hero-name-row">
+                <h1 class="hero-display-name">𝙎𝙞𝙙.</h1>
+                <span class="hero-handle-badge">@{{ githubUser }}</span>
               </div>
-            </div>
-          </div>
-
-          <!-- Heatmap Legend & Footer -->
-          <div class="calendar-footer-legend">
-            <span class="legend-note">Synced directly with GitHub activity</span>
-            <div class="heatmap-legend-scale">
-              <span class="legend-txt">Less</span>
-              <span class="calendar-day-cell level-0 mini"></span>
-              <span class="calendar-day-cell level-1 mini"></span>
-              <span class="calendar-day-cell level-2 mini"></span>
-              <span class="calendar-day-cell level-3 mini"></span>
-              <span class="calendar-day-cell level-4 mini"></span>
-              <span class="legend-txt">More</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="dashboard-dual-grid">
-      <section class="dashboard-card language-spectrum-card" aria-label="Languages Breakdown">
-        <div class="card-inner-header">
-          <div class="card-icon-tag">
-            <IconChartPie :size="20" :stroke-width="2" />
-          </div>
-          <div>
-            <h3 class="card-title">Languages</h3>
-            <span class="card-subtitle">Primary languages across open source code</span>
-          </div>
-        </div>
-
-        <template v-if="displayLanguages.length > 0">
-          <!-- Proportional Multi-Segment Progress Bar -->
-          <div class="language-multi-bar">
-            <div
-              v-for="(lang, lIdx) in displayLanguages"
-              :key="lIdx"
-              class="lang-bar-segment"
-              :style="{
-                width: `${lang.percentage}%`,
-                backgroundColor: lang.color || languageColors[lang.name] || '#bf6038',
-              }"
-              :title="`${lang.name}: ${Math.round(lang.percentage)}% across ${lang.count} repos`"
-            ></div>
-          </div>
-
-          <!-- Languages Breakdown Grid -->
-          <div class="lang-breakdown-grid">
-            <div
-              v-for="(lang, lIdx) in displayLanguages"
-              :key="lIdx"
-              class="lang-breakdown-card"
-            >
-              <div class="lang-card-top">
-                <div class="lang-name-cluster">
-                  <span
-                    class="lang-color-dot"
-                    :style="{ backgroundColor: lang.color || languageColors[lang.name] || '#bf6038' }"
-                  ></span>
-                  <span class="lang-name">{{ lang.name }}</span>
-                </div>
-                <div class="lang-metrics-cluster">
-                  <span v-if="lang.count" class="lang-count">
-                    {{ lang.count }} repo{{ lang.count === 1 ? '' : 's' }}
-                  </span>
-                  <span class="lang-pct">{{ Math.round(lang.percentage) }}%</span>
-                </div>
-              </div>
-              <div class="lang-mini-track">
-                <div
-                  class="lang-mini-fill"
-                  :style="{
-                    width: `${Math.max(lang.percentage, 2)}%`,
-                    backgroundColor: lang.color || languageColors[lang.name] || '#bf6038',
-                  }"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <div v-else class="dual-card-empty-state">
-          <IconCode class="empty-icon" :size="42" :stroke-width="1.6" />
-          <p>No language telemetry available</p>
-        </div>
-      </section>
-
-      <!-- Right Card: Recent GitHub Activity Feed -->
-      <section class="dashboard-card activity-feed-card" aria-label="Recent Commits & Events">
-        <div class="card-inner-header">
-          <div class="card-icon-tag">
-            <IconHistory :size="20" :stroke-width="2" />
-          </div>
-          <div>
-            <h3 class="card-title">Recent Activity</h3>
-            <span class="card-subtitle">Latest pushed commits and repository events</span>
-          </div>
-        </div>
-
-        <div v-if="displayEvents.length > 0" class="activity-events-list">
-          <article
-            v-for="ev in displayEvents"
-            :key="ev.id"
-            class="activity-event-item"
-          >
-            <div class="event-icon-badge">
-              <IconGitCommit v-if="ev.type === 'PushEvent'" :size="18" :stroke-width="2" />
-              <IconCirclePlus v-else-if="ev.type === 'CreateEvent'" :size="18" :stroke-width="2" />
-              <IconStarFilled v-else :size="16" />
-            </div>
-            <div class="event-content-col">
-              <div class="event-meta-top">
-                <a :href="ev.repoUrl" target="_blank" class="event-repo-name">
-                  {{ ev.repoName }}
-                </a>
-                <span v-if="ev.branch" class="event-branch-badge">
-                  <IconGitFork class="branch-icon" :size="14" :stroke-width="2" />
-                  {{ ev.branch }}
-                </span>
-                <span class="event-time">{{ formatRelativeTime(ev.createdAt) }}</span>
-              </div>
-              <p class="event-commit-msg">
-                {{ ev.commitMessage || ev.payloadAction || 'Pushed code changes' }}
+              <p class="hero-bio-tagline">
+                Software builder, system explorer, and interface artisan
+                crafting thoughtful open source tools & apps.
               </p>
-            </div>
-          </article>
-        </div>
-        <div v-else class="dual-card-empty-state">
-          <IconHistoryOff class="empty-icon" :size="42" :stroke-width="1.6" />
-          <p>No recent public activity recorded</p>
-        </div>
-      </section>
-    </div>
-
-    <!-- 4. Repository Explorer Board -->
-    <section class="dashboard-repos-section" aria-label="Repositories Explorer">
-      <div class="repos-toolbar-card">
-        <div class="repos-toolbar-title-row">
-          <div class="repos-title-group">
-            <div class="card-icon-tag">
-              <IconFolderCode :size="20" :stroke-width="2" />
-            </div>
-            <div>
-              <h2 class="card-title">Repositories</h2>
-              <span class="card-subtitle">
-                {{ filteredRepositories.length }} repositories matching filters
-              </span>
+              <div class="hero-badges-row">
+                <span class="hero-meta-chip">
+                  <IconBuilding
+                    class="chip-icon"
+                    :size="16"
+                    :stroke-width="2"
+                  />
+                  <span>@fagramdesktop</span>
+                </span>
+                <span class="hero-meta-chip">
+                  <IconMapPin class="chip-icon" :size="16" :stroke-width="2" />
+                  <span>Assam, India</span>
+                </span>
+                <span class="hero-meta-chip">
+                  <IconWorld class="chip-icon" :size="16" :stroke-width="2" />
+                  <span>burhanverse.eu.org</span>
+                </span>
+              </div>
             </div>
           </div>
-
-          <!-- Sort Selector -->
-          <div class="sort-selector-box">
-            <IconArrowsSort class="sort-icon" :size="18" :stroke-width="2" />
-            <select v-model="selectedSort" class="sort-dropdown" aria-label="Sort repositories">
-              <option value="updated">Recently Updated</option>
-              <option value="stars">Most Stars</option>
-              <option value="forks">Most Forks</option>
-              <option value="name">Alphabetical</option>
-            </select>
-          </div>
         </div>
 
-        <!-- Search Input -->
-        <div class="repos-search-bar">
-          <IconSearch class="search-icon" :size="20" :stroke-width="2" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search repositories by name, topic, or description..."
-            class="search-input"
-            aria-label="Search repositories"
-          />
-          <button
-            v-if="searchQuery"
-            type="button"
-            class="clear-search-btn"
-            title="Clear search"
-            @click="searchQuery = ''"
-          >
-            <IconX :size="18" :stroke-width="2" />
-          </button>
-        </div>
-
-        <!-- Language Filter Chips -->
-        <div class="filter-chips-row">
-          <button
-            v-for="flt in filters"
-            :key="flt"
-            type="button"
-            class="filter-chip-btn"
-            :class="{ active: selectedFilter === flt }"
-            @click="selectedFilter = flt"
+        <div class="hero-actions-col">
+          <a
+            href="https://github.com/Burhanverse"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="gh-external-btn"
+            title="Open GitHub Profile"
           >
             <md-ripple></md-ripple>
-            <span>{{ flt }}</span>
-          </button>
+            <IconExternalLink :size="18" :stroke-width="2" />
+            <span>View on GitHub</span>
+          </a>
+
+          <div class="hero-quick-stats">
+            <div class="quick-stat-box">
+              <span class="qs-num">{{
+                calendarData?.totalContributions ??
+                overview?.contributions ??
+                "—"
+              }}</span>
+              <span class="qs-lbl">Year Commits</span>
+            </div>
+            <div class="quick-stat-box">
+              <span class="qs-num">{{
+                overview?.totalRepos ?? (repositories.length || "—")
+              }}</span>
+              <span class="qs-lbl">Repositories</span>
+            </div>
+            <div class="quick-stat-box">
+              <span class="qs-num">{{ overview?.totalStars ?? "—" }}</span>
+              <span class="qs-lbl">Stars</span>
+            </div>
+            <div class="quick-stat-box">
+              <span class="qs-num">{{ overview?.followers ?? "—" }}</span>
+              <span class="qs-lbl">Followers</span>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <!-- 2. Interactive 52-Week Commit Calendar Heatmap Widget -->
+      <section
+        class="dashboard-calendar-widget"
+        aria-label="Commit Activity Calendar"
+      >
+        <div class="calendar-widget-header">
+          <div class="cal-title-group">
+            <div class="cal-icon-box">
+              <IconCalendar :size="20" :stroke-width="2" />
+            </div>
+            <div>
+              <h2 class="cal-title">Contribution Activity</h2>
+              <span
+                v-if="calendarData?.totalContributions != null"
+                class="cal-subtitle"
+              >
+                {{ calendarData.totalContributions }} contributions in the last
+                365 days
+              </span>
+              <span v-else class="cal-subtitle">
+                GitHub contribution timeline
+              </span>
+            </div>
+          </div>
+
+          <div class="streak-badges-cluster">
+            <div class="streak-badge-pill current-streak">
+              <IconFlame class="streak-icon" :size="18" :stroke-width="2" />
+              <span class="streak-val">{{
+                calendarData?.currentStreak != null
+                  ? `${calendarData.currentStreak} Days`
+                  : "—"
+              }}</span>
+              <span class="streak-lbl">Current Streak</span>
+            </div>
+            <div class="streak-badge-pill longest-streak">
+              <IconBolt class="streak-icon" :size="18" :stroke-width="2" />
+              <span class="streak-val">{{
+                calendarData?.longestStreak != null
+                  ? `${calendarData.longestStreak} Days`
+                  : "—"
+              }}</span>
+              <span class="streak-lbl">Longest Streak</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar Matrix Scroll Container -->
+        <div ref="calendarScrollEl" class="calendar-scroll-wrapper">
+          <div class="calendar-matrix-board">
+            <!-- Month Header Row -->
+            <div class="calendar-months-row">
+              <span class="month-label-spacer"></span>
+              <div class="months-labels-track">
+                <span
+                  v-for="(m, mIdx) in calendarData?.months"
+                  :key="mIdx"
+                  class="month-label-item"
+                  :style="{ gridColumnStart: m.firstWeekIndex + 1 }"
+                >
+                  {{ m.name }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Heatmap Days Grid -->
+            <div class="calendar-days-layout">
+              <!-- Day of Week Labels (Mon, Wed, Fri) -->
+              <div class="day-of-week-labels">
+                <span class="dow-label"></span>
+                <span class="dow-label">Mon</span>
+                <span class="dow-label"></span>
+                <span class="dow-label">Wed</span>
+                <span class="dow-label"></span>
+                <span class="dow-label">Fri</span>
+                <span class="dow-label"></span>
+              </div>
+
+              <!-- 52/53 Week Columns -->
+              <div class="calendar-weeks-columns">
+                <div
+                  v-for="(week, wIdx) in calendarData?.weeks"
+                  :key="wIdx"
+                  class="calendar-week-col"
+                >
+                  <div
+                    v-for="(day, dIdx) in week.days"
+                    :key="dIdx"
+                    class="calendar-day-cell"
+                    :class="[`level-${day.level}`, { 'empty-cell': !day.date }]"
+                    @mouseenter="handleDayHover($event, day)"
+                    @mouseleave="handleDayLeave"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Heatmap Legend & Footer -->
+            <div class="calendar-footer-legend">
+              <span class="legend-note"
+                >Synced directly with GitHub activity</span
+              >
+              <div class="heatmap-legend-scale">
+                <span class="legend-txt">Less</span>
+                <span class="calendar-day-cell level-0 mini"></span>
+                <span class="calendar-day-cell level-1 mini"></span>
+                <span class="calendar-day-cell level-2 mini"></span>
+                <span class="calendar-day-cell level-3 mini"></span>
+                <span class="calendar-day-cell level-4 mini"></span>
+                <span class="legend-txt">More</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="dashboard-dual-grid">
+        <section
+          class="dashboard-card language-spectrum-card"
+          aria-label="Languages Breakdown"
+        >
+          <div class="card-inner-header">
+            <div class="card-icon-tag">
+              <IconChartPie :size="20" :stroke-width="2" />
+            </div>
+            <div>
+              <h3 class="card-title">Languages</h3>
+              <span class="card-subtitle"
+                >Primary languages across open source code</span
+              >
+            </div>
+          </div>
+
+          <template v-if="displayLanguages.length > 0">
+            <!-- Proportional Multi-Segment Progress Bar -->
+            <div class="language-multi-bar">
+              <div
+                v-for="(lang, lIdx) in displayLanguages"
+                :key="lIdx"
+                class="lang-bar-segment"
+                :style="{
+                  width: `${lang.percentage}%`,
+                  backgroundColor:
+                    lang.color || languageColors[lang.name] || '#bf6038',
+                }"
+                :title="`${lang.name}: ${Math.round(lang.percentage)}% across ${lang.count} repos`"
+              ></div>
+            </div>
+
+            <!-- Languages Breakdown Grid -->
+            <div class="lang-breakdown-grid">
+              <div
+                v-for="(lang, lIdx) in displayLanguages"
+                :key="lIdx"
+                class="lang-breakdown-card"
+              >
+                <div class="lang-card-top">
+                  <div class="lang-name-cluster">
+                    <span
+                      class="lang-color-dot"
+                      :style="{
+                        backgroundColor:
+                          lang.color || languageColors[lang.name] || '#bf6038',
+                      }"
+                    ></span>
+                    <span class="lang-name">{{ lang.name }}</span>
+                  </div>
+                  <div class="lang-metrics-cluster">
+                    <span v-if="lang.count" class="lang-count">
+                      {{ lang.count }} repo{{ lang.count === 1 ? "" : "s" }}
+                    </span>
+                    <span class="lang-pct"
+                      >{{ Math.round(lang.percentage) }}%</span
+                    >
+                  </div>
+                </div>
+                <div class="lang-mini-track">
+                  <div
+                    class="lang-mini-fill"
+                    :style="{
+                      width: `${Math.max(lang.percentage, 2)}%`,
+                      backgroundColor:
+                        lang.color || languageColors[lang.name] || '#bf6038',
+                    }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="dual-card-empty-state">
+            <IconCode class="empty-icon" :size="42" :stroke-width="1.6" />
+            <p>No language telemetry available</p>
+          </div>
+        </section>
+
+        <!-- Right Card: Recent GitHub Activity Feed -->
+        <section
+          class="dashboard-card activity-feed-card"
+          aria-label="Recent Commits & Events"
+        >
+          <div class="card-inner-header">
+            <div class="card-icon-tag">
+              <IconHistory :size="20" :stroke-width="2" />
+            </div>
+            <div>
+              <h3 class="card-title">Recent Activity</h3>
+              <span class="card-subtitle"
+                >Latest pushed commits and repository events</span
+              >
+            </div>
+          </div>
+
+          <div v-if="displayEvents.length > 0" class="activity-events-list">
+            <article
+              v-for="ev in displayEvents"
+              :key="ev.id"
+              class="activity-event-item"
+            >
+              <div class="event-icon-badge">
+                <IconGitCommit
+                  v-if="ev.type === 'PushEvent'"
+                  :size="18"
+                  :stroke-width="2"
+                />
+                <IconCirclePlus
+                  v-else-if="ev.type === 'CreateEvent'"
+                  :size="18"
+                  :stroke-width="2"
+                />
+                <IconStarFilled v-else :size="16" />
+              </div>
+              <div class="event-content-col">
+                <div class="event-meta-top">
+                  <a :href="ev.repoUrl" target="_blank" class="event-repo-name">
+                    {{ ev.repoName }}
+                  </a>
+                  <span v-if="ev.branch" class="event-branch-badge">
+                    <IconGitFork
+                      class="branch-icon"
+                      :size="14"
+                      :stroke-width="2"
+                    />
+                    {{ ev.branch }}
+                  </span>
+                  <span class="event-time">{{
+                    formatRelativeTime(ev.createdAt)
+                  }}</span>
+                </div>
+                <p class="event-commit-msg">
+                  {{
+                    ev.commitMessage ||
+                    ev.payloadAction ||
+                    "Pushed code changes"
+                  }}
+                </p>
+              </div>
+            </article>
+          </div>
+          <div v-else class="dual-card-empty-state">
+            <IconHistoryOff class="empty-icon" :size="42" :stroke-width="1.6" />
+            <p>No recent public activity recorded</p>
+          </div>
+        </section>
       </div>
 
-      <!-- Repositories Cards Grid -->
-      <div v-if="filteredRepositories.length > 0" class="repos-cards-grid">
-        <article
-          v-for="repo in filteredRepositories"
-          :key="repo.id"
-          class="repo-card-widget"
-        >
-          <div class="repo-card-header">
-            <div class="repo-title-box">
-              <IconCode class="repo-type-icon" :size="20" :stroke-width="2" />
+      <!-- 4. Repository Explorer Board -->
+      <section
+        class="dashboard-repos-section"
+        aria-label="Repositories Explorer"
+      >
+        <div class="repos-toolbar-card">
+          <div class="repos-toolbar-title-row">
+            <div class="repos-title-group">
+              <div class="card-icon-tag">
+                <IconFolderCode :size="20" :stroke-width="2" />
+              </div>
+              <div>
+                <h2 class="card-title">Repositories</h2>
+                <span class="card-subtitle">
+                  {{ filteredRepositories.length }} repositories matching
+                  filters
+                </span>
+              </div>
+            </div>
+
+            <!-- Sort Selector -->
+            <div class="sort-selector-box">
+              <IconArrowsSort class="sort-icon" :size="18" :stroke-width="2" />
+              <select
+                v-model="selectedSort"
+                class="sort-dropdown"
+                aria-label="Sort repositories"
+              >
+                <option value="updated">Recently Updated</option>
+                <option value="stars">Most Stars</option>
+                <option value="forks">Most Forks</option>
+                <option value="name">Alphabetical</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Search Input -->
+          <div class="repos-search-bar">
+            <IconSearch class="search-icon" :size="20" :stroke-width="2" />
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search repositories by name, topic, or description..."
+              class="search-input"
+              aria-label="Search repositories"
+            />
+            <button
+              v-if="searchQuery"
+              type="button"
+              class="clear-search-btn"
+              title="Clear search"
+              @click="searchQuery = ''"
+            >
+              <IconX :size="18" :stroke-width="2" />
+            </button>
+          </div>
+
+          <!-- Language Filter Chips -->
+          <div class="filter-chips-row">
+            <button
+              v-for="flt in filters"
+              :key="flt"
+              type="button"
+              class="filter-chip-btn"
+              :class="{ active: selectedFilter === flt }"
+              @click="selectedFilter = flt"
+            >
+              <md-ripple></md-ripple>
+              <span>{{ flt }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Repositories Cards Grid -->
+        <div v-if="filteredRepositories.length > 0" class="repos-cards-grid">
+          <article
+            v-for="repo in filteredRepositories"
+            :key="repo.id"
+            class="repo-card-widget"
+          >
+            <div class="repo-card-header">
+              <div class="repo-title-box">
+                <IconCode class="repo-type-icon" :size="20" :stroke-width="2" />
+                <a
+                  :href="repo.html_url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="repo-name-link"
+                >
+                  {{ repo.name }}
+                </a>
+              </div>
+
+              <div class="repo-stats-pills">
+                <span class="repo-stat-pill" title="Stars">
+                  <IconStarFilled class="stat-icon" :size="14" />
+                  {{ repo.stargazers_count || 0 }}
+                </span>
+                <span class="repo-stat-pill" title="Forks">
+                  <IconGitFork class="stat-icon" :size="14" :stroke-width="2" />
+                  {{ repo.forks_count || 0 }}
+                </span>
+              </div>
+            </div>
+
+            <p class="repo-description">
+              {{
+                repo.description || "No description provided for this project."
+              }}
+            </p>
+
+            <!-- Topics / Tags -->
+            <div
+              v-if="repo.topics && repo.topics.length"
+              class="repo-topics-row"
+            >
+              <span
+                v-for="tag in repo.topics.slice(0, 4)"
+                :key="tag"
+                class="topic-tag-chip"
+              >
+                #{{ tag }}
+              </span>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="repo-card-footer">
+              <div class="repo-lang-badge">
+                <span
+                  class="lang-dot"
+                  :style="{
+                    backgroundColor: languageColors[repo.language] || '#bf6038',
+                  }"
+                ></span>
+                <span class="lang-text">{{ repo.language || "Code" }}</span>
+              </div>
+
               <a
                 :href="repo.html_url"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="repo-name-link"
+                class="repo-action-btn"
               >
-                {{ repo.name }}
+                <md-ripple></md-ripple>
+                <span>View Code</span>
+                <IconArrowUpRight
+                  class="arrow-icon"
+                  :size="16"
+                  :stroke-width="2"
+                />
               </a>
             </div>
+          </article>
+        </div>
 
-            <div class="repo-stats-pills">
-              <span class="repo-stat-pill" title="Stars">
-                <IconStarFilled class="stat-icon" :size="14" />
-                {{ repo.stargazers_count || 0 }}
-              </span>
-              <span class="repo-stat-pill" title="Forks">
-                <IconGitFork class="stat-icon" :size="14" :stroke-width="2" />
-                {{ repo.forks_count || 0 }}
-              </span>
-            </div>
-          </div>
-
-          <p class="repo-description">
-            {{ repo.description || "No description provided for this project." }}
-          </p>
-
-          <!-- Topics / Tags -->
-          <div v-if="repo.topics && repo.topics.length" class="repo-topics-row">
-            <span v-for="tag in repo.topics.slice(0, 4)" :key="tag" class="topic-tag-chip">
-              #{{ tag }}
-            </span>
-          </div>
-
-          <!-- Card Footer -->
-          <div class="repo-card-footer">
-            <div class="repo-lang-badge">
-              <span
-                class="lang-dot"
-                :style="{
-                  backgroundColor: languageColors[repo.language] || '#bf6038',
-                }"
-              ></span>
-              <span class="lang-text">{{ repo.language || "Code" }}</span>
-            </div>
-
-            <a
-              :href="repo.html_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="repo-action-btn"
-            >
-              <md-ripple></md-ripple>
-              <span>View Code</span>
-              <IconArrowUpRight class="arrow-icon" :size="16" :stroke-width="2" />
-            </a>
-          </div>
-        </article>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else class="repos-empty-state">
-        <IconSearch class="empty-icon" :size="48" :stroke-width="1.6" />
-        <h3>No repositories found</h3>
-        <p>No project matched your filter criteria or search query.</p>
-        <button
-          type="button"
-          class="reset-filters-btn"
-          @click="selectedFilter = 'All'; searchQuery = ''"
-        >
-          <md-ripple></md-ripple>
-          Reset Filters
-        </button>
-      </div>
-    </section>
+        <!-- Empty State -->
+        <div v-else class="repos-empty-state">
+          <IconSearch class="empty-icon" :size="48" :stroke-width="1.6" />
+          <h3>No repositories found</h3>
+          <p>No project matched your filter criteria or search query.</p>
+          <button
+            type="button"
+            class="reset-filters-btn"
+            @click="
+              selectedFilter = 'All';
+              searchQuery = '';
+            "
+          >
+            <md-ripple></md-ripple>
+            Reset Filters
+          </button>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -1027,7 +1140,9 @@ onUnmounted(() => {
   text-decoration: none;
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(191, 96, 56, 0.28);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .gh-external-btn:hover {
@@ -1267,7 +1382,9 @@ onUnmounted(() => {
   width: 100%;
   height: 1.4rem;
   border-radius: 0.35rem;
-  transition: transform 120ms ease, filter 120ms ease;
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
   cursor: pointer;
 }
 
@@ -1438,7 +1555,10 @@ onUnmounted(() => {
   border: 1px solid rgba(0, 0, 0, 0.04);
   padding: 1rem 1.2rem;
   border-radius: 1.6rem;
-  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
 }
 
 [theme="dark"] .lang-breakdown-card {
@@ -1826,7 +1946,9 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
   will-change: transform, box-shadow;
 }
 

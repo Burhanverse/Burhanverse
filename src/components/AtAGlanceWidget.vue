@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  onUnmounted,
+  markRaw,
+  type Component,
+} from "vue";
 import {
   IconCalendar,
   IconSun,
@@ -44,15 +51,27 @@ const formattedDateLong = computed(() => {
   });
 });
 
-function getWeatherInfo(code: number, isDay = true): { condition: string; icon: Component } {
+function getWeatherInfo(
+  code: number,
+  isDay = true,
+): { condition: string; icon: Component } {
   if (code === 0) {
-    return { condition: isDay ? "Clear" : "Clear Night", icon: markRaw(isDay ? IconSun : IconMoon) };
+    return {
+      condition: isDay ? "Clear" : "Clear Night",
+      icon: markRaw(isDay ? IconSun : IconMoon),
+    };
   }
   if (code === 1) {
-    return { condition: isDay ? "Mostly Clear" : "Mostly Clear", icon: markRaw(isDay ? IconSun : IconMoonStars) };
+    return {
+      condition: isDay ? "Mostly Clear" : "Mostly Clear",
+      icon: markRaw(isDay ? IconSun : IconMoonStars),
+    };
   }
   if (code === 2) {
-    return { condition: "Partly Cloudy", icon: markRaw(isDay ? IconCloud : IconMoonStars) };
+    return {
+      condition: "Partly Cloudy",
+      icon: markRaw(isDay ? IconCloud : IconMoonStars),
+    };
   }
   if (code === 3) {
     return { condition: "Overcast", icon: markRaw(IconCloud) };
@@ -75,7 +94,10 @@ function getWeatherInfo(code: number, isDay = true): { condition: string; icon: 
   if ([95, 96, 99].includes(code)) {
     return { condition: "Storm", icon: markRaw(IconCloudStorm) };
   }
-  return { condition: isDay ? "Sunny" : "Clear", icon: markRaw(isDay ? IconSun : IconMoon) };
+  return {
+    condition: isDay ? "Sunny" : "Clear",
+    icon: markRaw(isDay ? IconSun : IconMoon),
+  };
 }
 
 async function fetchWeather() {
@@ -90,7 +112,12 @@ async function fetchWeather() {
 
     if (ipRes && ipRes.ok) {
       const ipData = await ipRes.json();
-      if (ipData && ipData.success && typeof ipData.latitude === "number" && typeof ipData.longitude === "number") {
+      if (
+        ipData &&
+        ipData.success &&
+        typeof ipData.latitude === "number" &&
+        typeof ipData.longitude === "number"
+      ) {
         lat = ipData.latitude;
         lon = ipData.longitude;
       }
@@ -102,7 +129,10 @@ async function fetchWeather() {
 
       if (secRes && secRes.ok) {
         const secData = await secRes.json();
-        if (typeof secData.latitude === "number" && typeof secData.longitude === "number") {
+        if (
+          typeof secData.latitude === "number" &&
+          typeof secData.longitude === "number"
+        ) {
           lat = secData.latitude;
           lon = secData.longitude;
         }
@@ -114,7 +144,7 @@ async function fetchWeather() {
 
   try {
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day&timezone=auto`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day&timezone=auto`,
     );
     if (res.ok) {
       const data = await res.json();
@@ -131,7 +161,10 @@ async function fetchWeather() {
       }
     }
   } catch (err) {
-    console.warn("Could not fetch live weather from Open-Meteo, using fallback:", err);
+    console.warn(
+      "Could not fetch live weather from Open-Meteo, using fallback:",
+      err,
+    );
     weather.value = {
       temp: "29°C",
       condition: "Mostly Clear",
@@ -156,7 +189,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="at-a-glance-pill" :title="`At a Glance: ${formattedDateLong} • ${weather.temp} ${weather.condition}`">
+  <div
+    class="at-a-glance-pill"
+    :title="`At a Glance: ${formattedDateLong} • ${weather.temp} ${weather.condition}`"
+  >
     <div class="glance-left">
       <IconCalendar class="glance-icon" :size="16" :stroke-width="2" />
       <span class="glance-date glance-date-long">{{ formattedDateLong }}</span>
@@ -164,7 +200,12 @@ onUnmounted(() => {
     </div>
     <div class="glance-divider"></div>
     <div class="glance-right">
-      <component :is="weather.icon" class="glance-weather-icon" :size="18" :stroke-width="2" />
+      <component
+        :is="weather.icon"
+        class="glance-weather-icon"
+        :size="18"
+        :stroke-width="2"
+      />
       <span class="glance-temp">{{ weather.temp }}</span>
       <span class="glance-condition">{{ weather.condition }}</span>
     </div>
@@ -177,7 +218,10 @@ onUnmounted(() => {
   align-items: center;
   gap: 1.2rem;
   padding: 0.6rem 1.4rem;
-  background: var(--md-sys-color-surface-container-low, rgba(255, 248, 245, 0.88));
+  background: var(
+    --md-sys-color-surface-container-low,
+    rgba(255, 248, 245, 0.88)
+  );
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(191, 96, 56, 0.15);
@@ -185,7 +229,9 @@ onUnmounted(() => {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   user-select: none;
   font-family: var(--font-sans, "Google Sans Flex", "Inter", sans-serif);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
   max-width: 100%;
   box-sizing: border-box;
 }

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { IconArticle, IconBook, IconCalendar, IconArrowRight } from "@tabler/icons-vue";
+import {
+  IconArticle,
+  IconBook,
+  IconCalendar,
+  IconArrowRight,
+} from "@tabler/icons-vue";
 import { getSortedBlogPosts } from "../../blog/posts";
 import type { BlogPost } from "../../types";
 
@@ -28,12 +33,12 @@ function formatDate(dateString: string): string {
         </div>
         <div>
           <h1 class="blog-page-title">Articles & Guides</h1>
-          <p class="blog-page-subtitle">Explorations in software engineering, UI design, and systems</p>
+          <p class="blog-page-subtitle">
+            Explorations in software engineering, UI design, and systems
+          </p>
         </div>
       </div>
-      <div class="posts-count-chip">
-        {{ posts.length }} Articles Published
-      </div>
+      <div class="posts-count-chip">{{ posts.length }} Articles Published</div>
     </header>
 
     <!-- Blog Posts Widget Grid -->
@@ -111,7 +116,9 @@ function formatDate(dateString: string): string {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.14);
   border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.04);
   flex-wrap: wrap;
 }
 
@@ -195,10 +202,15 @@ function formatDate(dateString: string): string {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.14);
   border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   overflow: hidden;
-  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 250ms ease, border-color 250ms ease;
+  transition:
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 250ms ease,
+    border-color 250ms ease;
 }
 
 [theme="dark"] .blog-card-widget {
@@ -300,7 +312,8 @@ function formatDate(dateString: string): string {
   background: var(--md-sys-color-surface-container-high, #f8ece4);
   color: var(--md-sys-color-on-surface-variant, #52443d);
   border-radius: 0.8rem;
-  border: 1px solid var(--md-sys-color-outline-variant, rgba(220, 195, 180, 0.4));
+  border: 1px solid
+    var(--md-sys-color-outline-variant, rgba(220, 195, 180, 0.4));
 }
 
 .blog-title {
@@ -341,7 +354,9 @@ function formatDate(dateString: string): string {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(185, 80, 0, 0.25);
-  transition: transform 200ms ease, background-color 200ms ease;
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease;
 }
 
 .read-article-btn:hover {

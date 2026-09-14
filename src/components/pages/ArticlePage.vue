@@ -36,12 +36,15 @@ async function loadArticle() {
   }
 
   try {
-    const markdownModule = await import(`../../blog/content/${props.articleSlug}.md?raw`);
+    const markdownModule = await import(
+      `../../blog/content/${props.articleSlug}.md?raw`
+    );
     const rawMarkdown = markdownModule.default;
     contentHtml.value = await marked.parse(rawMarkdown);
   } catch (err) {
     console.error("Could not load article markdown:", err);
-    contentHtml.value = "<p>Sorry, the content for this article could not be loaded.</p>";
+    contentHtml.value =
+      "<p>Sorry, the content for this article could not be loaded.</p>";
   } finally {
     isLoading.value = false;
     await nextTick();
@@ -51,7 +54,9 @@ async function loadArticle() {
 }
 
 function attachCopyButtons() {
-  const codeBlocks = document.querySelectorAll<HTMLPreElement>(".article-content-body pre");
+  const codeBlocks = document.querySelectorAll<HTMLPreElement>(
+    ".article-content-body pre",
+  );
 
   const copySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg>`;
   const checkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>`;
@@ -108,7 +113,10 @@ function handleScroll(e: Event) {
   const scrollTop = target.scrollTop;
   const scrollHeight = target.scrollHeight - target.clientHeight;
   if (scrollHeight > 0) {
-    scrollProgress.value = Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100));
+    scrollProgress.value = Math.min(
+      100,
+      Math.max(0, (scrollTop / scrollHeight) * 100),
+    );
   }
 }
 
@@ -124,9 +132,12 @@ onMounted(() => {
   loadArticle();
 });
 
-watch(() => props.articleSlug, () => {
-  loadArticle();
-});
+watch(
+  () => props.articleSlug,
+  () => {
+    loadArticle();
+  },
+);
 </script>
 
 <template>
@@ -154,13 +165,18 @@ watch(() => props.articleSlug, () => {
 
       <!-- Linear Reading Progress Bar -->
       <div class="reading-progress-track">
-        <div class="reading-progress-bar" :style="{ width: `${scrollProgress}%` }"></div>
+        <div
+          class="reading-progress-bar"
+          :style="{ width: `${scrollProgress}%` }"
+        ></div>
       </div>
 
       <!-- Article Header Inside Window -->
       <header v-if="post" class="article-inner-header">
         <div class="article-tags-row">
-          <span v-for="tag in post.tags" :key="tag" class="m3-tag-pill">{{ tag }}</span>
+          <span v-for="tag in post.tags" :key="tag" class="m3-tag-pill">{{
+            tag
+          }}</span>
         </div>
         <span class="publish-date">{{ formatDate(post.date) }}</span>
 
@@ -176,13 +192,21 @@ watch(() => props.articleSlug, () => {
       <!-- Article Footer Widget -->
       <footer class="article-window-footer">
         <div class="footer-profile-box">
-          <img src="https://github.com/Burhanverse.png" alt="Burhan" class="footer-avatar" />
+          <img
+            src="https://github.com/Burhanverse.png"
+            alt="Burhan"
+            class="footer-avatar"
+          />
           <div>
             <h4 class="footer-author-name">Sid (Burhan)</h4>
             <p class="footer-author-bio">Author & open source explorer.</p>
           </div>
         </div>
-        <button type="button" class="back-pill-btn footer-back-btn" @click="emit('back-to-blog')">
+        <button
+          type="button"
+          class="back-pill-btn footer-back-btn"
+          @click="emit('back-to-blog')"
+        >
           <IconArrowLeft :size="18" :stroke-width="2" />
           <span>Return to Articles</span>
         </button>
@@ -207,7 +231,9 @@ watch(() => props.articleSlug, () => {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(191, 96, 56, 0.14);
   border-radius: 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -378,7 +404,10 @@ watch(() => props.articleSlug, () => {
   border-radius: 20px;
   overflow: hidden;
   margin-top: 1.6rem;
-  background: var(--md-sys-color-surface-container-highest, rgba(0, 0, 0, 0.04));
+  background: var(
+    --md-sys-color-surface-container-highest,
+    rgba(0, 0, 0, 0.04)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -455,7 +484,10 @@ watch(() => props.articleSlug, () => {
 .article-content-body :deep(blockquote) {
   margin: 2rem 0;
   padding: 1.4rem 2rem;
-  background: var(--md-sys-color-surface-container-high, rgba(255, 238, 230, 0.7));
+  background: var(
+    --md-sys-color-surface-container-high,
+    rgba(255, 238, 230, 0.7)
+  );
   border-left: 4px solid var(--md-sys-color-primary, #b95000);
   border-radius: 0 16px 16px 0;
   font-style: italic;
@@ -496,7 +528,10 @@ watch(() => props.articleSlug, () => {
 }
 
 .article-content-body :deep(code:not(pre code)) {
-  background: var(--md-sys-color-surface-container-high, rgba(191, 96, 56, 0.12));
+  background: var(
+    --md-sys-color-surface-container-high,
+    rgba(191, 96, 56, 0.12)
+  );
   color: var(--md-sys-color-primary, #bf6038);
   padding: 0.2rem 0.6rem;
   border-radius: 0.6rem;
@@ -570,8 +605,12 @@ watch(() => props.articleSlug, () => {
   align-items: center;
   justify-content: space-between;
   padding: 2.4rem 3.2rem;
-  border-top: 1px solid var(--md-sys-color-outline-variant, rgba(220, 195, 180, 0.3));
-  background: var(--md-sys-color-surface-container-high, rgba(255, 238, 230, 0.6));
+  border-top: 1px solid
+    var(--md-sys-color-outline-variant, rgba(220, 195, 180, 0.3));
+  background: var(
+    --md-sys-color-surface-container-high,
+    rgba(255, 238, 230, 0.6)
+  );
   flex-wrap: wrap;
   gap: 1.6rem;
 }
