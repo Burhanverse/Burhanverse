@@ -20,7 +20,7 @@ const theme = ref<"light" | "dark">("light");
 const isMobile = ref(false);
 
 function checkViewport() {
-  isMobile.value = window.innerWidth < 768;
+  isMobile.value = window.innerWidth <= 768;
 }
 
 function initTheme() {

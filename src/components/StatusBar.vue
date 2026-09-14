@@ -122,9 +122,7 @@ function updateNetworkInfo() {
     if (
       type === "cellular" ||
       type === "wimax" ||
-      rawEff === "2g" ||
-      rawEff === "3g" ||
-      rawEff === "slow-2g" ||
+      rawEff === "5g" ||
       (conn.saveData && type !== "wifi") ||
       (isMobileDevice.value && type !== "wifi" && type !== "ethernet")
     ) {

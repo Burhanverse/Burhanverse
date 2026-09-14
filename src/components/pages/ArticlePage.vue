@@ -155,17 +155,7 @@ watch(() => props.articleSlug, () => {
         <div class="article-tags-row">
           <span v-for="tag in post.tags" :key="tag" class="m3-tag-pill">{{ tag }}</span>
         </div>
-
-        <h1 class="article-main-title">{{ post.title }}</h1>
-        <p class="article-lead-description">{{ post.description }}</p>
-
-        <div class="article-author-row">
-          <img src="https://github.com/Burhanverse.png" alt="Burhan" class="author-avatar" />
-          <div class="author-meta">
-            <span class="author-name">Sid (Burhan)</span>
-            <span class="publish-date">{{ formatDate(post.date) }}</span>
-          </div>
-        </div>
+        <span class="publish-date">{{ formatDate(post.date) }}</span>
 
         <!-- Hero Image Banner -->
         <div v-if="post.image" class="article-hero-banner">

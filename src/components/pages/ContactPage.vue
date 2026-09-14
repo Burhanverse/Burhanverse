@@ -41,32 +41,34 @@ const featuredProjects = [
       <!-- 1. Minimal Profile Card -->
       <section class="minimal-profile-card">
         <div class="profile-header-layout">
-          <div class="profile-avatar-box">
-            <img
-              src="https://github.com/Burhanverse.png"
-              alt="Burhan"
-              class="profile-avatar-img"
-            />
+          <div class="profile-identity-row">
+            <div class="profile-avatar-box">
+              <img
+                src="https://github.com/Burhanverse.png"
+                alt="Burhan"
+                class="profile-avatar-img"
+              />
+            </div>
+
+            <div class="profile-title-col">
+              <div class="name-badge-row">
+                <h1 class="profile-name">Burhan</h1>
+                <span class="profile-handle">@Burhanverse</span>
+              </div>
+
+              <p class="profile-role">Software Builder & Interface Artisan</p>
+            </div>
           </div>
 
-          <div class="profile-meta-col">
-            <div class="name-badge-row">
-              <h1 class="profile-name">Burhan</h1>
-              <span class="profile-handle">@Burhanverse</span>
-            </div>
+          <p class="profile-bio-text">
+            Crafting open-source, desktop tools, and tactile Material Design interfaces.
+          </p>
 
-            <p class="profile-role">Software Builder & Interface Artisan</p>
-
-            <p class="profile-bio-text">
-              Crafting open-source, desktop tools, and tactile Material Design interfaces.
-            </p>
-
-            <div class="tech-chips-row">
-              <span v-for="tech in keyTechnologies" :key="tech.name" class="tech-chip">
-                <span class="material-symbols-rounded chip-icon">{{ tech.icon }}</span>
-                {{ tech.name }}
-              </span>
-            </div>
+          <div class="tech-chips-row">
+            <span v-for="tech in keyTechnologies" :key="tech.name" class="tech-chip">
+              <span class="material-symbols-rounded chip-icon">{{ tech.icon }}</span>
+              {{ tech.name }}
+            </span>
           </div>
         </div>
       </section>
@@ -156,6 +158,7 @@ const featuredProjects = [
   max-width: 96rem;
   margin: 0 auto;
   padding: 2rem 2rem 6rem 9rem;
+  box-sizing: border-box;
 }
 
 .minimal-about-container {
@@ -184,8 +187,14 @@ const featuredProjects = [
 
 .profile-header-layout {
   display: flex;
-  align-items: flex-start;
-  gap: 2.4rem;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.profile-identity-row {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
 }
 
 .profile-avatar-box {
@@ -201,17 +210,16 @@ const featuredProjects = [
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.profile-meta-col {
-  flex: 1;
+.profile-title-col {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.6rem;
   min-width: 0;
 }
 
 .name-badge-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 1.2rem;
   flex-wrap: wrap;
 }
@@ -254,10 +262,10 @@ const featuredProjects = [
 
 .profile-bio-text {
   font-family: "Lexend Deca", sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   line-height: 1.6;
   color: var(--md-sys-color-on-surface-variant, #52443d);
-  margin: 0.4rem 0 0.8rem;
+  margin: 0;
   max-width: 65ch;
 }
 
@@ -484,42 +492,100 @@ const featuredProjects = [
 
 @media (max-width: 768px) {
   .about-page-view {
-    padding: 1.2rem 1.6rem 2rem 1.6rem;
+    padding: 1rem 1.6rem 2.4rem 1.6rem;
   }
 
   .minimal-profile-card,
   .minimal-projects-section,
   .minimal-connect-section {
-    padding: 2rem 1.6rem;
-    border-radius: 2.2rem;
+    padding: 2rem 1.8rem;
+    border-radius: 28px;
   }
 
   .profile-header-layout {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 1.4rem;
+  }
+
+  .profile-identity-row {
     gap: 1.6rem;
+    align-items: center;
+  }
+
+  .profile-avatar-img {
+    width: 6.8rem;
+    height: 6.8rem;
+    border-radius: 20px;
   }
 
   .name-badge-row {
-    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .profile-name {
+    font-size: 2.4rem;
+  }
+
+  .profile-handle {
+    font-size: 1.15rem;
+    padding: 0.2rem 0.7rem;
+  }
+
+  .profile-role {
+    font-size: 1.3rem;
+  }
+
+  .profile-bio-text {
+    font-size: 1.35rem;
+    line-height: 1.55;
+    margin: 0;
+    text-align: left;
   }
 
   .tech-chips-row {
-    justify-content: center;
+    gap: 0.75rem;
+    justify-content: flex-start;
   }
 
   .projects-grid {
     grid-template-columns: 1fr;
+    gap: 1.4rem;
   }
 
   .connect-links-row {
     flex-direction: column;
+    gap: 1rem;
   }
 
   .connect-btn {
-    justify-content: center;
     width: 100%;
+    justify-content: flex-start;
+    padding: 1.2rem 1.8rem;
+  }
+
+  .connect-btn .arrow-icon {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .minimal-profile-card,
+  .minimal-projects-section,
+  .minimal-connect-section {
+    padding: 1.8rem 1.4rem;
+  }
+
+  .profile-identity-row {
+    gap: 1.4rem;
+  }
+
+  .profile-avatar-img {
+    width: 6.2rem;
+    height: 6.2rem;
+    border-radius: 18px;
+  }
+
+  .profile-name {
+    font-size: 2.2rem;
   }
 }
 </style>
