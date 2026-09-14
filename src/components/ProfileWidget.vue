@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IconArrowUpRight, IconMapPin } from "@tabler/icons-vue";
 // Profile widget component
 </script>
 
@@ -38,7 +39,7 @@
       >
         <span class="chip-dot github-dot"></span>
         <span class="chip-label">GitHub</span>
-        <span class="material-symbols-rounded chip-arrow">arrow_outward</span>
+        <IconArrowUpRight class="chip-arrow" :size="16" :stroke-width="2" />
       </a>
 
       <a
@@ -50,7 +51,7 @@
       >
         <span class="chip-dot discord-dot"></span>
         <span class="chip-label">Discord</span>
-        <span class="material-symbols-rounded chip-arrow">arrow_outward</span>
+        <IconArrowUpRight class="chip-arrow" :size="16" :stroke-width="2" />
       </a>
 
       <a
@@ -62,11 +63,11 @@
       >
         <span class="chip-dot twitter-dot"></span>
         <span class="chip-label">X / Twitter</span>
-        <span class="material-symbols-rounded chip-arrow">arrow_outward</span>
+        <IconArrowUpRight class="chip-arrow" :size="16" :stroke-width="2" />
       </a>
 
       <div class="profile-chip static-chip" title="Location: Assam, India">
-        <span class="material-symbols-rounded chip-pin">location_on</span>
+        <IconMapPin class="chip-pin" :size="18" :stroke-width="2" />
         <span class="chip-label">Assam, IN</span>
       </div>
     </div>

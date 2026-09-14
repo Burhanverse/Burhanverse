@@ -1,5 +1,22 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, markRaw } from "vue";
+import {
+  IconBrandTypescript,
+  IconBrandVue,
+  IconBrandRust,
+  IconTerminal2,
+  IconPalette,
+  IconSend,
+  IconLayoutGrid,
+  IconRocket,
+  IconLink,
+  IconArrowUpRight,
+  IconBrandGithub,
+  IconBrandDiscord,
+  IconBrandX,
+  IconCopy,
+  IconCheck,
+} from "@tabler/icons-vue";
 
 const copied = ref(false);
 
@@ -12,24 +29,24 @@ function copyDiscordHandle() {
 }
 
 const keyTechnologies = [
-  { name: "TypeScript", icon: "code" },
-  { name: "Vue 3", icon: "layers" },
-  { name: "Rust", icon: "memory" },
-  { name: "Linux", icon: "terminal" },
-  { name: "Material Design", icon: "palette" },
+  { name: "TypeScript", icon: markRaw(IconBrandTypescript) },
+  { name: "Vue 3", icon: markRaw(IconBrandVue) },
+  { name: "Rust", icon: markRaw(IconBrandRust) },
+  { name: "Linux", icon: markRaw(IconTerminal2) },
+  { name: "Material Design", icon: markRaw(IconPalette) },
 ];
 
 const featuredProjects = [
   {
     title: "Fagram Desktop",
     desc: "A feature-rich Telegram desktop client with Material Design 3 UI.",
-    icon: "send",
+    icon: markRaw(IconSend),
     url: "https://github.com/fagramdesktop/fagram-desktop",
   },
   {
     title: "WebClip",
     desc: "A Gboard web clipboard companion for desktop.",
-    icon: "widgets",
+    icon: markRaw(IconLayoutGrid),
     url: "https://github.com/Burhanverse/webclip",
   },
 ];
@@ -66,7 +83,7 @@ const featuredProjects = [
 
           <div class="tech-chips-row">
             <span v-for="tech in keyTechnologies" :key="tech.name" class="tech-chip">
-              <span class="material-symbols-rounded chip-icon">{{ tech.icon }}</span>
+              <component :is="tech.icon" class="chip-icon" :size="16" :stroke-width="2" />
               {{ tech.name }}
             </span>
           </div>
@@ -75,7 +92,7 @@ const featuredProjects = [
 
       <section class="minimal-projects-section">
         <h2 class="section-heading">
-          <span class="material-symbols-rounded heading-icon">rocket_launch</span>
+          <IconRocket class="heading-icon" :size="20" :stroke-width="2" />
           Featured Projects
         </h2>
 
@@ -90,12 +107,12 @@ const featuredProjects = [
           >
             <md-ripple></md-ripple>
             <div class="project-icon-box">
-              <span class="material-symbols-rounded">{{ item.icon }}</span>
+              <component :is="item.icon" :size="22" :stroke-width="1.8" />
             </div>
             <div class="project-info-col">
               <div class="project-title-row">
                 <h3 class="project-title">{{ item.title }}</h3>
-                <span class="material-symbols-rounded out-arrow">arrow_outward</span>
+                <IconArrowUpRight class="out-arrow" :size="16" :stroke-width="2" />
               </div>
               <p class="project-desc">{{ item.desc }}</p>
             </div>
@@ -105,7 +122,7 @@ const featuredProjects = [
 
       <section class="minimal-connect-section">
         <h2 class="section-heading">
-          <span class="material-symbols-rounded heading-icon">link</span>
+          <IconLink class="heading-icon" :size="20" :stroke-width="2" />
           Connect
         </h2>
 
@@ -117,9 +134,9 @@ const featuredProjects = [
             class="connect-btn"
           >
             <md-ripple></md-ripple>
-            <span class="material-symbols-rounded btn-icon">code</span>
+            <IconBrandGithub class="btn-icon" :size="20" :stroke-width="2" />
             <span>GitHub</span>
-            <span class="material-symbols-rounded arrow-icon">arrow_outward</span>
+            <IconArrowUpRight class="arrow-icon" :size="16" :stroke-width="2" />
           </a>
 
           <button
@@ -128,9 +145,10 @@ const featuredProjects = [
             @click="copyDiscordHandle"
           >
             <md-ripple></md-ripple>
-            <span class="material-symbols-rounded btn-icon">forum</span>
+            <IconBrandDiscord class="btn-icon" :size="20" :stroke-width="2" />
             <span>{{ copied ? 'Copied @burhanverse' : 'Discord' }}</span>
-            <span class="material-symbols-rounded arrow-icon">{{ copied ? 'check' : 'content_copy' }}</span>
+            <IconCheck v-if="copied" class="arrow-icon" :size="16" :stroke-width="2" />
+            <IconCopy v-else class="arrow-icon" :size="16" :stroke-width="2" />
           </button>
 
           <a
@@ -140,9 +158,9 @@ const featuredProjects = [
             class="connect-btn"
           >
             <md-ripple></md-ripple>
-            <span class="material-symbols-rounded btn-icon">flutter</span>
+            <IconBrandX class="btn-icon" :size="20" :stroke-width="2" />
             <span>X / Twitter</span>
-            <span class="material-symbols-rounded arrow-icon">arrow_outward</span>
+            <IconArrowUpRight class="arrow-icon" :size="16" :stroke-width="2" />
           </a>
         </div>
       </section>
@@ -390,8 +408,10 @@ const featuredProjects = [
   color: var(--md-sys-color-primary, #ffb59d);
 }
 
+.project-icon-box svg,
 .project-icon-box .material-symbols-rounded {
-  font-size: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
 }
 
 .project-info-col {

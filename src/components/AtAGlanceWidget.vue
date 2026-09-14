@@ -1,5 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from "vue";
+import {
+  IconCalendar,
+  IconSun,
+  IconMoon,
+  IconMoonStars,
+  IconCloud,
+  IconMist,
+  IconCloudRain,
+  IconSnowflake,
+  IconCloudStorm,
+} from "@tabler/icons-vue";
 
 const now = ref(new Date());
 let timer: number | null = null;
@@ -8,13 +19,13 @@ let weatherTimer: number | null = null;
 interface WeatherState {
   temp: string;
   condition: string;
-  icon: string;
+  icon: Component;
 }
 
 const weather = ref<WeatherState>({
   temp: "29°C",
   condition: "Mostly Clear",
-  icon: "wb_sunny",
+  icon: markRaw(IconSun),
 });
 
 const formattedDate = computed(() => {
@@ -33,38 +44,38 @@ const formattedDateLong = computed(() => {
   });
 });
 
-function getWeatherInfo(code: number, isDay = true): { condition: string; icon: string } {
+function getWeatherInfo(code: number, isDay = true): { condition: string; icon: Component } {
   if (code === 0) {
-    return { condition: isDay ? "Clear" : "Clear Night", icon: isDay ? "wb_sunny" : "bedtime" };
+    return { condition: isDay ? "Clear" : "Clear Night", icon: markRaw(isDay ? IconSun : IconMoon) };
   }
   if (code === 1) {
-    return { condition: isDay ? "Mostly Clear" : "Mostly Clear", icon: isDay ? "sunny" : "partly_cloudy_night" };
+    return { condition: isDay ? "Mostly Clear" : "Mostly Clear", icon: markRaw(isDay ? IconSun : IconMoonStars) };
   }
   if (code === 2) {
-    return { condition: "Partly Cloudy", icon: isDay ? "partly_cloudy_day" : "partly_cloudy_night" };
+    return { condition: "Partly Cloudy", icon: markRaw(isDay ? IconCloud : IconMoonStars) };
   }
   if (code === 3) {
-    return { condition: "Overcast", icon: "cloud" };
+    return { condition: "Overcast", icon: markRaw(IconCloud) };
   }
   if (code === 45 || code === 48) {
-    return { condition: "Foggy", icon: "foggy" };
+    return { condition: "Foggy", icon: markRaw(IconMist) };
   }
   if ([51, 53, 55, 56, 57].includes(code)) {
-    return { condition: "Drizzle", icon: "rainy_light" };
+    return { condition: "Drizzle", icon: markRaw(IconCloudRain) };
   }
   if ([61, 63, 65, 66, 67].includes(code)) {
-    return { condition: "Rain", icon: "rainy" };
+    return { condition: "Rain", icon: markRaw(IconCloudRain) };
   }
   if ([71, 73, 75, 77, 85, 86].includes(code)) {
-    return { condition: "Snow", icon: "weather_snowy" };
+    return { condition: "Snow", icon: markRaw(IconSnowflake) };
   }
   if ([80, 81, 82].includes(code)) {
-    return { condition: "Showers", icon: "rainy_heavy" };
+    return { condition: "Showers", icon: markRaw(IconCloudRain) };
   }
   if ([95, 96, 99].includes(code)) {
-    return { condition: "Storm", icon: "thunderstorm" };
+    return { condition: "Storm", icon: markRaw(IconCloudStorm) };
   }
-  return { condition: isDay ? "Sunny" : "Clear", icon: isDay ? "wb_sunny" : "bedtime" };
+  return { condition: isDay ? "Sunny" : "Clear", icon: markRaw(isDay ? IconSun : IconMoon) };
 }
 
 async function fetchWeather() {
@@ -147,13 +158,13 @@ onUnmounted(() => {
 <template>
   <div class="at-a-glance-pill" :title="`At a Glance: ${formattedDateLong} • ${weather.temp} ${weather.condition}`">
     <div class="glance-left">
-      <span class="material-symbols-rounded glance-icon">calendar_today</span>
+      <IconCalendar class="glance-icon" :size="16" :stroke-width="2" />
       <span class="glance-date glance-date-long">{{ formattedDateLong }}</span>
       <span class="glance-date glance-date-short">{{ formattedDate }}</span>
     </div>
     <div class="glance-divider"></div>
     <div class="glance-right">
-      <span class="material-symbols-rounded glance-weather-icon">{{ weather.icon }}</span>
+      <component :is="weather.icon" class="glance-weather-icon" :size="18" :stroke-width="2" />
       <span class="glance-temp">{{ weather.temp }}</span>
       <span class="glance-condition">{{ weather.condition }}</span>
     </div>
@@ -203,14 +214,17 @@ onUnmounted(() => {
 }
 
 .glance-icon {
-  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--md-sys-color-primary, #bf6038);
 }
 
 .glance-weather-icon {
-  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--md-sys-color-secondary, #b86e24);
-  font-variation-settings: "FILL" 1, "wght" 600;
 }
 
 .glance-date {

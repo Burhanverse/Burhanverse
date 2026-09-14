@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { IconArticle, IconBook, IconCalendar, IconArrowRight } from "@tabler/icons-vue";
 import { getSortedBlogPosts } from "../../blog/posts";
 import type { BlogPost } from "../../types";
 
@@ -23,7 +24,7 @@ function formatDate(dateString: string): string {
     <header class="blog-header-widget">
       <div class="header-content">
         <div class="header-icon-box">
-          <span class="material-symbols-rounded">article</span>
+          <IconArticle :size="26" :stroke-width="1.8" />
         </div>
         <div>
           <h1 class="blog-page-title">Articles & Guides</h1>
@@ -48,10 +49,10 @@ function formatDate(dateString: string): string {
         <!-- Compact card header -->
         <div class="compact-card-header">
           <div class="compact-card-icon">
-            <span class="material-symbols-rounded">menu_book</span>
+            <IconBook :size="24" :stroke-width="1.8" />
           </div>
           <span class="compact-card-date">
-            <span class="material-symbols-rounded">event</span>
+            <IconCalendar :size="16" :stroke-width="1.8" />
             <span>{{ formatDate(post.date) }}</span>
           </span>
         </div>
@@ -76,7 +77,7 @@ function formatDate(dateString: string): string {
               @click.stop="emit('open-article', post.slug)"
             >
               <span>Read Article</span>
-              <span class="material-symbols-rounded">arrow_forward</span>
+              <IconArrowRight :size="16" :stroke-width="2" />
             </button>
           </div>
         </div>
@@ -142,8 +143,10 @@ function formatDate(dateString: string): string {
   color: #edbc90;
 }
 
+.header-icon-box svg,
 .header-icon-box .material-symbols-rounded {
-  font-size: 2.6rem;
+  width: 2.6rem;
+  height: 2.6rem;
 }
 
 .blog-page-title {
@@ -240,8 +243,10 @@ function formatDate(dateString: string): string {
   color: #edbc90;
 }
 
+.compact-card-icon svg,
 .compact-card-icon .material-symbols-rounded {
-  font-size: 2.4rem;
+  width: 2.4rem;
+  height: 2.4rem;
 }
 
 .compact-card-date {
@@ -254,8 +259,10 @@ function formatDate(dateString: string): string {
   color: var(--md-sys-color-on-surface-variant, #6b5548);
 }
 
+.compact-card-date svg,
 .compact-card-date .material-symbols-rounded {
-  font-size: 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
   color: var(--md-sys-color-primary, #b95000);
 }
 
@@ -342,8 +349,10 @@ function formatDate(dateString: string): string {
   background: var(--md-sys-color-primary-hover, #953e00);
 }
 
+.read-article-btn svg,
 .read-article-btn .material-symbols-rounded {
-  font-size: 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 @media (max-width: 768px) {

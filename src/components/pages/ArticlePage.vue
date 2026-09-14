@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from "vue";
+import { IconArrowLeft, IconClock } from "@tabler/icons-vue";
 import { getBlogPostBySlug } from "../../blog/posts";
 import type { BlogPost } from "../../types";
 import { marked } from "marked";
@@ -30,6 +31,7 @@ async function loadArticle() {
 
   if (!post.value) {
     isLoading.value = false;
+    contentHtml.value = "<p>Article not found.</p>";
     return;
   }
 
@@ -44,14 +46,19 @@ async function loadArticle() {
     isLoading.value = false;
     await nextTick();
     Prism.highlightAll();
-    setupCodeCopyButtons();
+    attachCopyButtons();
   }
 }
 
-function setupCodeCopyButtons() {
-  const codeBlocks = document.querySelectorAll<HTMLElement>(".article-content-body pre");
+function attachCopyButtons() {
+  const codeBlocks = document.querySelectorAll<HTMLPreElement>(".article-content-body pre");
+
+  const copySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" /><path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" /></svg>`;
+  const checkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>`;
+
   codeBlocks.forEach((pre) => {
-    if (pre.parentElement?.classList.contains("code-block-wrapper")) return;
+    if (pre.parentNode?.classList.contains("code-block-wrapper")) return;
+
     const codeEl = pre.querySelector("code") || pre;
 
     const copyBtn = document.createElement("button");
@@ -60,7 +67,7 @@ function setupCodeCopyButtons() {
     copyBtn.setAttribute("title", "Copy code");
     copyBtn.setAttribute("aria-label", "Copy code snippet");
     copyBtn.innerHTML = `
-      <span class="material-symbols-rounded">content_copy</span>
+      ${copySvg}
       <span>Copy</span>
     `;
     copyBtn.addEventListener("click", async (e) => {
@@ -70,13 +77,13 @@ function setupCodeCopyButtons() {
         await navigator.clipboard.writeText(codeEl.textContent || "");
         copyBtn.classList.add("copied");
         copyBtn.innerHTML = `
-          <span class="material-symbols-rounded">check</span>
+          ${checkSvg}
           <span>Copied!</span>
         `;
         setTimeout(() => {
           copyBtn.classList.remove("copied");
           copyBtn.innerHTML = `
-            <span class="material-symbols-rounded">content_copy</span>
+            ${copySvg}
             <span>Copy</span>
           `;
         }, 2000);
@@ -135,12 +142,12 @@ watch(() => props.articleSlug, () => {
           @click="emit('back-to-blog')"
         >
           <md-ripple></md-ripple>
-          <span class="material-symbols-rounded">arrow_back</span>
+          <IconArrowLeft :size="18" :stroke-width="2" />
           <span>Back to Articles</span>
         </button>
 
         <div v-if="post" class="window-reading-meta">
-          <span class="material-symbols-rounded">schedule</span>
+          <IconClock :size="16" :stroke-width="2" />
           <span>5 min read</span>
         </div>
       </div>
@@ -176,7 +183,7 @@ watch(() => props.articleSlug, () => {
           </div>
         </div>
         <button type="button" class="back-pill-btn footer-back-btn" @click="emit('back-to-blog')">
-          <span class="material-symbols-rounded">arrow_back</span>
+          <IconArrowLeft :size="18" :stroke-width="2" />
           <span>Return to Articles</span>
         </button>
       </footer>
@@ -272,8 +279,10 @@ watch(() => props.articleSlug, () => {
   color: var(--md-sys-color-on-surface-variant, #6b5548);
 }
 
+.window-reading-meta svg,
 .window-reading-meta .material-symbols-rounded {
-  font-size: 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
   color: var(--md-sys-color-primary, #b95000);
 }
 
@@ -549,12 +558,10 @@ watch(() => props.articleSlug, () => {
   border-color: #2e7d32 !important;
 }
 
+.article-content-body :deep(.code-copy-btn svg),
 .article-content-body :deep(.code-copy-btn .material-symbols-rounded) {
-  font-size: 1.4rem;
-}
-
-.article-content-body :deep(.code-copy-btn .material-symbols-rounded) {
-  font-size: 1.4rem;
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 /* Footer */

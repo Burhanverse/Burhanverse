@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { IconBrandGithub, IconMovie, IconActivity } from "@tabler/icons-vue";
 import { fetchGitHubOverview } from "../features/statsCards/githubService";
 import { fetchAnilistStats } from "../features/statsCards/anilistService";
 import type { GitHubOverview, AnilistStats } from "../features/statsCards/types";
@@ -52,7 +53,7 @@ onMounted(() => {
       <md-ripple></md-ripple>
       <div class="stat-widget-header">
         <div class="stat-header-icon-box gh-icon-box">
-          <span class="material-symbols-rounded">developer_mode</span>
+          <IconBrandGithub :size="22" :stroke-width="1.8" />
         </div>
         <div class="stat-header-meta">
           <h2 class="stat-widget-title">GitHub Activity</h2>
@@ -119,7 +120,7 @@ onMounted(() => {
       <md-ripple></md-ripple>
       <div class="stat-widget-header">
         <div class="stat-header-icon-box anime-icon-box">
-          <span class="material-symbols-rounded">movie</span>
+          <IconMovie :size="22" :stroke-width="1.8" />
         </div>
         <div class="stat-header-meta">
           <h2 class="stat-widget-title">AniList Journey</h2>
@@ -154,7 +155,7 @@ onMounted(() => {
         </div>
 
         <div class="anime-vibe-footer">
-          <span class="material-symbols-rounded">stream</span>
+          <IconActivity :size="16" :stroke-width="1.8" />
           <span>{{ anilistData ? 'Overview of Anime & Manga stats from AniList' : 'AniList stats temporarily unavailable' }}</span>
         </div>
       </template>
@@ -238,8 +239,8 @@ onMounted(() => {
   color: #c3cc9f;
 }
 
-.stat-header-icon-box .material-symbols-rounded {
-  font-size: 2.2rem;
+.stat-header-icon-box svg {
+  display: flex;
 }
 
 .stat-header-meta {
@@ -353,8 +354,7 @@ onMounted(() => {
   padding-top: 0.4rem;
 }
 
-.anime-vibe-footer .material-symbols-rounded {
-  font-size: 1.6rem;
+.anime-vibe-footer svg {
   color: var(--md-sys-color-tertiary, #927014);
 }
 

@@ -1,5 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, markRaw, type Component } from "vue";
+import {
+  IconWifi,
+  IconWifiOff,
+  IconAntennaBars5,
+  IconNetwork,
+  IconBattery,
+  IconBattery1,
+  IconBattery2,
+  IconBattery3,
+  IconBattery4,
+  IconBatteryCharging,
+  IconSun,
+  IconMoon,
+} from "@tabler/icons-vue";
 
 const props = defineProps<{
   theme: "light" | "dark";
@@ -61,27 +75,19 @@ const onBatteryChange = () => {
   }
 };
 
-const batteryIcon = computed(() => {
+const batteryIcon = computed<Component>(() => {
   if (!hasBatteryApi.value) {
-    return "battery_full";
+    return markRaw(IconBattery4);
   }
   const lvl = batteryLevel.value;
   if (isCharging.value) {
-    if (lvl >= 90) return "battery_charging_full";
-    if (lvl >= 70) return "battery_charging_80";
-    if (lvl >= 50) return "battery_charging_60";
-    if (lvl >= 30) return "battery_charging_50";
-    if (lvl >= 15) return "battery_charging_30";
-    return "battery_charging_20";
+    return markRaw(IconBatteryCharging);
   }
-  if (lvl >= 95) return "battery_full";
-  if (lvl >= 85) return "battery_6_bar";
-  if (lvl >= 70) return "battery_5_bar";
-  if (lvl >= 55) return "battery_4_bar";
-  if (lvl >= 40) return "battery_3_bar";
-  if (lvl >= 25) return "battery_2_bar";
-  if (lvl >= 10) return "battery_1_bar";
-  return "battery_alert";
+  if (lvl >= 85) return markRaw(IconBattery4);
+  if (lvl >= 60) return markRaw(IconBattery3);
+  if (lvl >= 30) return markRaw(IconBattery2);
+  if (lvl >= 15) return markRaw(IconBattery1);
+  return markRaw(IconBattery);
 });
 
 const batteryTitle = computed(() => {
@@ -143,11 +149,11 @@ function toggleNetworkType() {
   connectionType.value = connectionType.value === "cellular" ? "wifi" : "cellular";
 }
 
-const networkIcon = computed(() => {
-  if (!isOnline.value) return "wifi_off";
-  if (connectionType.value === "cellular") return "signal_cellular_alt";
-  if (connectionType.value === "ethernet") return "lan";
-  return "wifi";
+const networkIcon = computed<Component>(() => {
+  if (!isOnline.value) return markRaw(IconWifiOff);
+  if (connectionType.value === "cellular") return markRaw(IconAntennaBars5);
+  if (connectionType.value === "ethernet") return markRaw(IconNetwork);
+  return markRaw(IconWifi);
 });
 
 const networkTitle = computed(() => {
@@ -178,56 +184,47 @@ onMounted(() => {
         onBatteryChange();
         bm.addEventListener("levelchange", onBatteryChange);
         bm.addEventListener("chargingchange", onBatteryChange);
-        (bm as any).onlevelchange = onBatteryChange;
-        (bm as any).onchargingchange = onBatteryChange;
       })
       .catch(() => {
         hasBatteryApi.value = false;
       });
-  } else {
-    hasBatteryApi.value = false;
   }
 
   updateNetworkInfo();
   window.addEventListener("online", updateNetworkInfo);
   window.addEventListener("offline", updateNetworkInfo);
 
-  networkConnection =
+  const conn =
     (navigator as any).connection ||
     (navigator as any).mozConnection ||
     (navigator as any).webkitConnection;
-  if (networkConnection) {
-    if (typeof networkConnection.addEventListener === "function") {
-      networkConnection.addEventListener("change", updateNetworkInfo);
-    }
-    networkConnection.onchange = updateNetworkInfo;
+  if (conn && "addEventListener" in conn) {
+    conn.addEventListener("change", updateNetworkInfo);
   }
 });
 
 onUnmounted(() => {
   if (timer) clearInterval(timer);
+  window.removeEventListener("online", updateNetworkInfo);
+  window.removeEventListener("offline", updateNetworkInfo);
 
   if (batteryManager) {
     batteryManager.removeEventListener("levelchange", onBatteryChange);
     batteryManager.removeEventListener("chargingchange", onBatteryChange);
-    (batteryManager as any).onlevelchange = null;
-    (batteryManager as any).onchargingchange = null;
   }
 
-  window.removeEventListener("online", updateNetworkInfo);
-  window.removeEventListener("offline", updateNetworkInfo);
-
-  if (networkConnection) {
-    if (typeof networkConnection.removeEventListener === "function") {
-      networkConnection.removeEventListener("change", updateNetworkInfo);
-    }
-    networkConnection.onchange = null;
+  const conn =
+    (navigator as any).connection ||
+    (navigator as any).mozConnection ||
+    (navigator as any).webkitConnection;
+  if (conn && "removeEventListener" in conn) {
+    conn.removeEventListener("change", updateNetworkInfo);
   }
 });
 </script>
 
 <template>
-  <header class="tablet-status-bar" aria-label="Device Status Bar">
+  <header class="tablet-status-bar" :class="{ 'is-mobile-view': isMobile }">
     <div class="status-left">
       <Transition name="clock-pill-fade">
         <div
@@ -251,12 +248,13 @@ onUnmounted(() => {
         @click="toggleNetworkType"
         @keydown.enter="toggleNetworkType"
       >
-        <span
-          class="material-symbols-rounded status-icon"
+        <component
+          :is="networkIcon"
+          class="status-icon"
           :class="{ 'is-offline': !isOnline }"
-        >
-          {{ networkIcon }}
-        </span>
+          :size="16"
+          :stroke-width="2"
+        />
         <span v-if="isOnline && effectiveType" class="network-text">{{ effectiveType }}</span>
       </div>
       
@@ -265,12 +263,13 @@ onUnmounted(() => {
         :class="{ 'icon-only': !hasBatteryApi }"
         :title="batteryTitle"
       >
-        <span
-          class="material-symbols-rounded status-icon"
+        <component
+          :is="batteryIcon"
+          class="status-icon"
           :class="{ 'is-charging': isCharging, 'is-low': hasBatteryApi && batteryLevel <= 20 }"
-        >
-          {{ batteryIcon }}
-        </span>
+          :size="18"
+          :stroke-width="2"
+        />
         <span v-if="hasBatteryApi" class="battery-text">{{ batteryLevel }}%</span>
       </div>
 
@@ -285,9 +284,8 @@ onUnmounted(() => {
       >
         <md-ripple></md-ripple>
         <span class="switch-thumb">
-          <span class="material-symbols-rounded switch-thumb-icon">
-            {{ theme === "dark" ? "light_mode" : "dark_mode" }}
-          </span>
+          <IconSun v-if="theme === 'dark'" class="switch-thumb-icon" :size="14" :stroke-width="2.5" />
+          <IconMoon v-else class="switch-thumb-icon" :size="14" :stroke-width="2.5" />
         </span>
       </button>
     </div>

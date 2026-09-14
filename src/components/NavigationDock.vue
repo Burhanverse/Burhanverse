@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import {
-  Home2BoldIcon,
-  Home2LinearIcon,
-  Code2BoldIcon,
-  Code2LinearIcon,
-  NotesBoldIcon,
-  NotesLinearIcon,
-  UserRoundedBoldIcon,
-  UserRoundedLinearIcon,
-} from "@solar-icons/vue";
+  IconHome,
+  IconHomeFilled,
+  IconBrandGithub,
+  IconBrandGithubFilled,
+  IconArticle,
+  IconArticleFilled,
+  IconUser,
+  IconUserFilled,
+} from "@tabler/icons-vue";
 
 const props = defineProps<{
   currentTab: "home" | "repos" | "blog" | "article" | "contact";
@@ -24,26 +24,26 @@ const navItems = [
   {
     id: "home" as const,
     label: "Home",
-    boldIcon: Home2BoldIcon,
-    linearIcon: Home2LinearIcon,
+    activeIcon: IconHomeFilled,
+    inactiveIcon: IconHome,
   },
   {
     id: "repos" as const,
     label: "GitHub",
-    boldIcon: Code2BoldIcon,
-    linearIcon: Code2LinearIcon,
+    activeIcon: IconBrandGithubFilled,
+    inactiveIcon: IconBrandGithub,
   },
   {
     id: "blog" as const,
     label: "Blog",
-    boldIcon: NotesBoldIcon,
-    linearIcon: NotesLinearIcon,
+    activeIcon: IconArticleFilled,
+    inactiveIcon: IconArticle,
   },
   {
     id: "contact" as const,
     label: "About",
-    boldIcon: UserRoundedBoldIcon,
-    linearIcon: UserRoundedLinearIcon,
+    activeIcon: IconUserFilled,
+    inactiveIcon: IconUser,
   },
 ];
 
@@ -67,9 +67,10 @@ function isTabActive(id: string) {
     >
       <md-ripple></md-ripple>
       <component
-        :is="isTabActive(item.id) ? item.boldIcon : item.linearIcon"
+        :is="isTabActive(item.id) ? item.activeIcon : item.inactiveIcon"
         class="m3-dock-icon"
         :size="24"
+        :stroke-width="1.8"
       />
     </button>
   </nav>
@@ -105,21 +106,27 @@ function isTabActive(id: string) {
   background: var(--nav-glass-bg, rgba(255, 248, 245, 0.76));
   backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
   -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
-  border: 1px solid var(--nav-glass-border, rgba(191, 96, 56, 0.18));
-  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6));
+  border: none;
+  outline: none;
+  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08));
   z-index: 100;
   user-select: none;
   box-sizing: border-box;
   transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
               background-color 250ms ease,
-              border-color 250ms ease,
               box-shadow 250ms ease;
 }
 
 [theme="dark"] .m3-expressive-dock {
   background: var(--nav-glass-bg, rgba(38, 27, 22, 0.76));
-  border: 1px solid var(--nav-glass-border, rgba(255, 255, 255, 0.12));
-  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12));
+  border: none;
+  outline: none;
+  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35));
+}
+
+.m3-expressive-dock:focus,
+.m3-expressive-dock:focus-visible {
+  outline: none;
 }
 
 /* =============================================================================
@@ -133,6 +140,7 @@ function isTabActive(id: string) {
   height: 4.2rem;
   border-radius: 9999px;
   border: none;
+  outline: none;
   background: rgba(191, 96, 56, 0.11);
   color: var(--md-sys-color-on-surface-variant, #52443d);
   display: flex;

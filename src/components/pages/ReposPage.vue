@@ -1,5 +1,27 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, nextTick } from "vue";
+import {
+  IconBuilding,
+  IconMapPin,
+  IconWorld,
+  IconExternalLink,
+  IconCalendar,
+  IconFlame,
+  IconBolt,
+  IconChartPie,
+  IconCode,
+  IconHistory,
+  IconGitCommit,
+  IconCirclePlus,
+  IconStarFilled,
+  IconGitFork,
+  IconHistoryOff,
+  IconFolderCode,
+  IconArrowsSort,
+  IconSearch,
+  IconX,
+  IconArrowUpRight,
+} from "@tabler/icons-vue";
 import M3LoadingIndicator from "../M3LoadingIndicator.vue";
 import { githubApi } from "../../repos/githubApi";
 import {
@@ -373,15 +395,15 @@ onUnmounted(() => {
             </p>
             <div class="hero-badges-row">
               <span class="hero-meta-chip">
-                <span class="material-symbols-rounded chip-icon">corporate_fare</span>
+                <IconBuilding class="chip-icon" :size="16" :stroke-width="2" />
                 <span>@fagramdesktop</span>
               </span>
               <span class="hero-meta-chip">
-                <span class="material-symbols-rounded chip-icon">location_on</span>
+                <IconMapPin class="chip-icon" :size="16" :stroke-width="2" />
                 <span>Assam, India</span>
               </span>
               <span class="hero-meta-chip">
-                <span class="material-symbols-rounded chip-icon">public</span>
+                <IconWorld class="chip-icon" :size="16" :stroke-width="2" />
                 <span>burhanverse.eu.org</span>
               </span>
             </div>
@@ -398,7 +420,7 @@ onUnmounted(() => {
           title="Open GitHub Profile"
         >
           <md-ripple></md-ripple>
-          <span class="material-symbols-rounded">open_in_new</span>
+          <IconExternalLink :size="18" :stroke-width="2" />
           <span>View on GitHub</span>
         </a>
 
@@ -428,7 +450,7 @@ onUnmounted(() => {
       <div class="calendar-widget-header">
         <div class="cal-title-group">
           <div class="cal-icon-box">
-            <span class="material-symbols-rounded">calendar_month</span>
+            <IconCalendar :size="20" :stroke-width="2" />
           </div>
           <div>
             <h2 class="cal-title">Contribution Activity</h2>
@@ -443,12 +465,12 @@ onUnmounted(() => {
 
         <div class="streak-badges-cluster">
           <div class="streak-badge-pill current-streak">
-            <span class="material-symbols-rounded streak-icon">local_fire_department</span>
+            <IconFlame class="streak-icon" :size="18" :stroke-width="2" />
             <span class="streak-val">{{ calendarData?.currentStreak != null ? `${calendarData.currentStreak} Days` : '—' }}</span>
             <span class="streak-lbl">Current Streak</span>
           </div>
           <div class="streak-badge-pill longest-streak">
-            <span class="material-symbols-rounded streak-icon">bolt</span>
+            <IconBolt class="streak-icon" :size="18" :stroke-width="2" />
             <span class="streak-val">{{ calendarData?.longestStreak != null ? `${calendarData.longestStreak} Days` : '—' }}</span>
             <span class="streak-lbl">Longest Streak</span>
           </div>
@@ -526,7 +548,7 @@ onUnmounted(() => {
       <section class="dashboard-card language-spectrum-card" aria-label="Languages Breakdown">
         <div class="card-inner-header">
           <div class="card-icon-tag">
-            <span class="material-symbols-rounded">donut_large</span>
+            <IconChartPie :size="20" :stroke-width="2" />
           </div>
           <div>
             <h3 class="card-title">Languages</h3>
@@ -584,7 +606,7 @@ onUnmounted(() => {
           </div>
         </template>
         <div v-else class="dual-card-empty-state">
-          <span class="material-symbols-rounded empty-icon">code_blocks</span>
+          <IconCode class="empty-icon" :size="42" :stroke-width="1.6" />
           <p>No language telemetry available</p>
         </div>
       </section>
@@ -593,7 +615,7 @@ onUnmounted(() => {
       <section class="dashboard-card activity-feed-card" aria-label="Recent Commits & Events">
         <div class="card-inner-header">
           <div class="card-icon-tag">
-            <span class="material-symbols-rounded">history</span>
+            <IconHistory :size="20" :stroke-width="2" />
           </div>
           <div>
             <h3 class="card-title">Recent Activity</h3>
@@ -608,9 +630,9 @@ onUnmounted(() => {
             class="activity-event-item"
           >
             <div class="event-icon-badge">
-              <span class="material-symbols-rounded">
-                {{ ev.type === 'PushEvent' ? 'commit' : ev.type === 'CreateEvent' ? 'add_circle' : 'star' }}
-              </span>
+              <IconGitCommit v-if="ev.type === 'PushEvent'" :size="18" :stroke-width="2" />
+              <IconCirclePlus v-else-if="ev.type === 'CreateEvent'" :size="18" :stroke-width="2" />
+              <IconStarFilled v-else :size="16" />
             </div>
             <div class="event-content-col">
               <div class="event-meta-top">
@@ -618,7 +640,7 @@ onUnmounted(() => {
                   {{ ev.repoName }}
                 </a>
                 <span v-if="ev.branch" class="event-branch-badge">
-                  <span class="material-symbols-rounded branch-icon">fork_right</span>
+                  <IconGitFork class="branch-icon" :size="14" :stroke-width="2" />
                   {{ ev.branch }}
                 </span>
                 <span class="event-time">{{ formatRelativeTime(ev.createdAt) }}</span>
@@ -630,7 +652,7 @@ onUnmounted(() => {
           </article>
         </div>
         <div v-else class="dual-card-empty-state">
-          <span class="material-symbols-rounded empty-icon">history_toggle_off</span>
+          <IconHistoryOff class="empty-icon" :size="42" :stroke-width="1.6" />
           <p>No recent public activity recorded</p>
         </div>
       </section>
@@ -642,7 +664,7 @@ onUnmounted(() => {
         <div class="repos-toolbar-title-row">
           <div class="repos-title-group">
             <div class="card-icon-tag">
-              <span class="material-symbols-rounded">folder_code</span>
+              <IconFolderCode :size="20" :stroke-width="2" />
             </div>
             <div>
               <h2 class="card-title">Repositories</h2>
@@ -654,7 +676,7 @@ onUnmounted(() => {
 
           <!-- Sort Selector -->
           <div class="sort-selector-box">
-            <span class="material-symbols-rounded sort-icon">sort</span>
+            <IconArrowsSort class="sort-icon" :size="18" :stroke-width="2" />
             <select v-model="selectedSort" class="sort-dropdown" aria-label="Sort repositories">
               <option value="updated">Recently Updated</option>
               <option value="stars">Most Stars</option>
@@ -666,7 +688,7 @@ onUnmounted(() => {
 
         <!-- Search Input -->
         <div class="repos-search-bar">
-          <span class="material-symbols-rounded search-icon">search</span>
+          <IconSearch class="search-icon" :size="20" :stroke-width="2" />
           <input
             v-model="searchQuery"
             type="text"
@@ -681,7 +703,7 @@ onUnmounted(() => {
             title="Clear search"
             @click="searchQuery = ''"
           >
-            <span class="material-symbols-rounded">close</span>
+            <IconX :size="18" :stroke-width="2" />
           </button>
         </div>
 
@@ -710,7 +732,7 @@ onUnmounted(() => {
         >
           <div class="repo-card-header">
             <div class="repo-title-box">
-              <span class="material-symbols-rounded repo-type-icon">code</span>
+              <IconCode class="repo-type-icon" :size="20" :stroke-width="2" />
               <a
                 :href="repo.html_url"
                 target="_blank"
@@ -723,11 +745,11 @@ onUnmounted(() => {
 
             <div class="repo-stats-pills">
               <span class="repo-stat-pill" title="Stars">
-                <span class="material-symbols-rounded stat-icon">star</span>
+                <IconStarFilled class="stat-icon" :size="14" />
                 {{ repo.stargazers_count || 0 }}
               </span>
               <span class="repo-stat-pill" title="Forks">
-                <span class="material-symbols-rounded stat-icon">call_split</span>
+                <IconGitFork class="stat-icon" :size="14" :stroke-width="2" />
                 {{ repo.forks_count || 0 }}
               </span>
             </div>
@@ -764,7 +786,7 @@ onUnmounted(() => {
             >
               <md-ripple></md-ripple>
               <span>View Code</span>
-              <span class="material-symbols-rounded arrow-icon">arrow_outward</span>
+              <IconArrowUpRight class="arrow-icon" :size="16" :stroke-width="2" />
             </a>
           </div>
         </article>
@@ -772,7 +794,7 @@ onUnmounted(() => {
 
       <!-- Empty State -->
       <div v-else class="repos-empty-state">
-        <span class="material-symbols-rounded empty-icon">manage_search</span>
+        <IconSearch class="empty-icon" :size="48" :stroke-width="1.6" />
         <h3>No repositories found</h3>
         <p>No project matched your filter criteria or search query.</p>
         <button
