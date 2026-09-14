@@ -11,7 +11,7 @@ import {
 } from "@tabler/icons-vue";
 
 const props = defineProps<{
-  currentTab: "home" | "repos" | "blog" | "article" | "contact";
+  currentTab: "home" | "repos" | "blog" | "article" | "contact" | "support";
   theme: "light" | "dark";
   isMobile: boolean;
 }>();

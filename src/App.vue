@@ -7,12 +7,13 @@ import ReposPage from "./components/pages/ReposPage.vue";
 import BlogPage from "./components/pages/BlogPage.vue";
 import ArticlePage from "./components/pages/ArticlePage.vue";
 import ContactPage from "./components/pages/ContactPage.vue";
+import SupportPage from "./components/pages/SupportPage.vue";
 
 // Import Google's official @material/web components
 import "@material/web/ripple/ripple.js";
 import "@material/web/elevation/elevation.js";
 
-type TabId = "home" | "repos" | "blog" | "article" | "contact";
+type TabId = "home" | "repos" | "blog" | "article" | "contact" | "support";
 
 const currentTab = ref<TabId>("home");
 const currentArticleSlug = ref<string>("");
@@ -44,6 +45,13 @@ function toggleTheme() {
   localStorage.setItem("theme", theme.value);
 }
 
+function resetScroller() {
+  const scroller = document.querySelector(".homescreen-content-scroller");
+  if (scroller) {
+    scroller.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 function navigate(tab: "home" | "repos" | "blog" | "contact") {
   currentTab.value = tab;
   currentArticleSlug.value = "";
@@ -53,7 +61,7 @@ function navigate(tab: "home" | "repos" | "blog" | "contact") {
     "",
     tab === "home" ? "/" : `/?section=${tab}`,
   );
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  resetScroller();
 }
 
 function openArticle(slug: string) {
@@ -61,7 +69,7 @@ function openArticle(slug: string) {
   currentTab.value = "article";
   document.documentElement.setAttribute("data-tab", "blog");
   window.history.pushState({ tab: "article", slug }, "", `/?article=${slug}`);
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  resetScroller();
 }
 
 function parseUrl() {
@@ -75,7 +83,7 @@ function parseUrl() {
     document.documentElement.setAttribute("data-tab", "blog");
   } else if (
     section &&
-    ["home", "repos", "blog", "contact", "about"].includes(section)
+    ["home", "repos", "blog", "contact", "about", "support"].includes(section)
   ) {
     const tab = (section === "about" ? "contact" : section) as TabId;
     currentTab.value = tab;
@@ -84,6 +92,7 @@ function parseUrl() {
     currentTab.value = "home";
     document.documentElement.setAttribute("data-tab", "home");
   }
+  resetScroller();
 }
 
 onMounted(() => {
@@ -105,6 +114,7 @@ watch(currentTab, (newTab) => {
     "data-tab",
     newTab === "article" ? "blog" : newTab,
   );
+  resetScroller();
 });
 </script>
 
@@ -154,6 +164,7 @@ watch(currentTab, (newTab) => {
           @back-to-blog="navigate('blog')"
         />
         <ContactPage v-else-if="currentTab === 'contact'" :key="currentTab" />
+        <SupportPage v-else-if="currentTab === 'support'" :key="currentTab" />
       </Transition>
     </main>
   </div>

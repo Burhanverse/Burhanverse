@@ -24,7 +24,7 @@ import {
 
 const props = defineProps<{
   theme: "light" | "dark";
-  currentTab?: "home" | "repos" | "blog" | "article" | "contact";
+  currentTab?: "home" | "repos" | "blog" | "article" | "contact" | "support";
   isMobile?: boolean;
 }>();
 
