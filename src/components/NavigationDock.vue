@@ -1,4 +1,15 @@
 <script setup lang="ts">
+import {
+  Home2BoldIcon,
+  Home2LinearIcon,
+  Code2BoldIcon,
+  Code2LinearIcon,
+  NotesBoldIcon,
+  NotesLinearIcon,
+  UserRoundedBoldIcon,
+  UserRoundedLinearIcon,
+} from "@solar-icons/vue";
+
 const props = defineProps<{
   currentTab: "home" | "repos" | "blog" | "article" | "contact";
   theme: "light" | "dark";
@@ -10,48 +21,56 @@ const emit = defineEmits<{
 }>();
 
 const navItems = [
-  { id: "home", label: "Home", icon: "home" },
-  { id: "repos", label: "GitHub", icon: "developer_mode" },
-  { id: "blog", label: "Blog", icon: "article" },
-  { id: "contact", label: "About", icon: "person" },
-] as const;
+  {
+    id: "home" as const,
+    label: "Home",
+    boldIcon: Home2BoldIcon,
+    linearIcon: Home2LinearIcon,
+  },
+  {
+    id: "repos" as const,
+    label: "GitHub",
+    boldIcon: Code2BoldIcon,
+    linearIcon: Code2LinearIcon,
+  },
+  {
+    id: "blog" as const,
+    label: "Blog",
+    boldIcon: NotesBoldIcon,
+    linearIcon: NotesLinearIcon,
+  },
+  {
+    id: "contact" as const,
+    label: "About",
+    boldIcon: UserRoundedBoldIcon,
+    linearIcon: UserRoundedLinearIcon,
+  },
+];
+
+function isTabActive(id: string) {
+  return props.currentTab === id || (id === "blog" && props.currentTab === "article");
+}
 </script>
 
 <template>
-  <!-- Desktop / Tablet Left Vertical Dock (Free Floating Squircles Matching Mockup) -->
-  <aside v-if="!isMobile" class="tablet-launcher-dock" aria-label="Launcher Rail">
-    <div class="dock-floating-column">
-      <button
-        v-for="item in navItems"
-        :key="item.id"
-        type="button"
-        class="dock-launcher-btn"
-        :class="{ active: currentTab === item.id || (item.id === 'blog' && currentTab === 'article') }"
-        :title="item.label"
-        @click="emit('navigate', item.id)"
-      >
-        <md-ripple></md-ripple>
-        <span class="material-symbols-rounded dock-icon">{{ item.icon }}</span>
-        <span class="dock-tooltip">{{ item.label }}</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- Google Pixel Mobile Material 3 Bottom Navigation Bar -->
-  <nav v-else class="m3-bottom-nav-bar" aria-label="Material 3 Navigation Bar">
+  <!-- Material Design 3 Expressive Floating Navigation Dock -->
+  <nav class="m3-expressive-dock" aria-label="Navigation Dock">
     <button
       v-for="item in navItems"
       :key="item.id"
       type="button"
-      class="m3-nav-destination"
-      :class="{ selected: currentTab === item.id || (item.id === 'blog' && currentTab === 'article') }"
+      class="m3-dock-item"
+      :class="{ active: isTabActive(item.id) }"
+      :title="item.label"
+      :aria-label="item.label"
       @click="emit('navigate', item.id)"
     >
-      <div class="m3-nav-icon-container">
-        <md-ripple></md-ripple>
-        <span class="material-symbols-rounded m3-nav-icon">{{ item.icon }}</span>
-      </div>
-      <span class="m3-nav-label">{{ item.label }}</span>
+      <md-ripple></md-ripple>
+      <component
+        :is="isTabActive(item.id) ? item.boldIcon : item.linearIcon"
+        class="m3-dock-icon"
+        :size="24"
+      />
     </button>
   </nav>
 </template>
@@ -59,261 +78,166 @@ const navItems = [
 <style scoped>
 /* =============================================================================
    FROSTED GLASS CONFIGURATION (EASILY ADJUSTABLE)
-   These variables configure the frosted glass blur intensity, saturation,
-   and translucent surface tinting for both desktop and mobile floating navs.
-   You can adjust --nav-glass-blur here or in src/style/variables.css.
    ============================================================================= */
 :root {
-  --nav-glass-blur: 24px;              /* Adjust blur intensity (e.g. 12px, 20px, 32px) */
-  --nav-glass-saturate: 180%;          /* Adjust saturation behind glass (100% - 200%) */
+  --nav-glass-blur: 24px;
+  --nav-glass-saturate: 180%;
 }
 
-/* ==========================================================================
-   DESKTOP / TABLET VERTICAL DOCK (MATCHING USER MOCKUP EXACTLY)
-   ========================================================================== */
-.tablet-launcher-dock {
-  position: fixed;
-  left: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Background on nav buttons group with Frosted Glass */
-.dock-floating-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.4rem;
-  padding: 1.2rem 0.8rem;
-  background: var(--nav-glass-bg, rgba(255, 248, 245, 0.72));
-  backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
-  -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
-  border: 1px solid var(--nav-glass-border, rgba(191, 96, 56, 0.18));
-  border-radius: 9999px;
-  box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6));
-  transition: background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
-}
-
-[theme="dark"] .dock-floating-column {
-  background: var(--nav-glass-bg, rgba(38, 27, 22, 0.72));
-  border: 1px solid var(--nav-glass-border, rgba(255, 255, 255, 0.12));
-  box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12));
-}
-
-/* Individual launcher buttons */
-.dock-launcher-btn {
-  position: relative;
-  width: 4.4rem;
-  height: 4.4rem;
-  border-radius: 50%;
-  border: none;
-  background: var(--md-sys-color-dock-btn, #bf6038);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #ffffff;
-  transition:
-    transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-radius 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 280ms ease,
-    background-color 200ms ease;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
-}
-
-.dock-launcher-btn:hover {
-  transform: scale(1.12);
-  filter: brightness(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
-}
-
-/* Active tab button morphs into rounded squircle */
-.dock-launcher-btn.active {
-  border-radius: 1.4rem;
-  background: var(--md-sys-color-dock-btn-active, #a64d26);
-  transform: scale(1.06);
-  box-shadow: 0 6px 18px rgba(191, 96, 56, 0.38);
-}
-
-.dock-icon {
-  font-size: 2.2rem;
-  color: #ffffff;
-  transition: transform 250ms ease;
-}
-
-.dock-launcher-btn.active .dock-icon {
-  font-variation-settings: "FILL" 1, "wght" 500;
-  transform: scale(1.05);
-}
-
-/* Tooltip on hover */
-.dock-tooltip {
-  position: absolute;
-  left: calc(100% + 1.2rem);
-  top: 50%;
-  transform: translateY(-50%) translateX(-8px);
-  padding: 0.5rem 1.1rem;
-  background: var(--md-sys-color-surface-container-high, #f2d8c7);
-  color: var(--md-sys-color-on-surface, #221a16);
-  font-family: "Lexend Deca", sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  border-radius: 0.8rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 200ms ease, transform 200ms ease;
-  z-index: 1000;
-}
-
-.dock-launcher-btn:hover .dock-tooltip {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-}
-
-/* ==========================================================================
-   MOBILE FLOATING MATERIAL 3 NAVIGATION DOCK
-   Floats centered above the bottom edge with a pill-shaped frosted glass shell,
-   matching the desktop floating launcher dock aesthetic.
-   ========================================================================== */
-.m3-bottom-nav-bar {
+/* =============================================================================
+   MATERIAL DESIGN 3 EXPRESSIVE FLOATING DOCK
+   Mobile Viewport: Floating horizontal pill dock at the bottom.
+   Desktop Viewport: Floating vertical pill dock on the left side.
+   ============================================================================= */
+.m3-expressive-dock {
   position: fixed;
   bottom: calc(1.4rem + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 3.2rem);
-  max-width: 42rem;
-  height: 6.8rem;
-  padding: 0 0.6rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  height: 5.6rem;
   border-radius: 9999px;
-  background: var(--nav-glass-bg, rgba(255, 248, 245, 0.72));
+  background: var(--nav-glass-bg, rgba(255, 248, 245, 0.76));
   backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
   -webkit-backdrop-filter: blur(var(--nav-glass-blur, 24px)) saturate(var(--nav-glass-saturate, 180%));
   border: 1px solid var(--nav-glass-border, rgba(191, 96, 56, 0.18));
   box-shadow: var(--nav-glass-shadow, 0 10px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(191, 96, 56, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.6));
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   z-index: 100;
   user-select: none;
+  box-sizing: border-box;
   transition: transform 250ms cubic-bezier(0.2, 0, 0, 1),
               background-color 250ms ease,
               border-color 250ms ease,
               box-shadow 250ms ease;
 }
 
-[theme="dark"] .m3-bottom-nav-bar {
-  background: var(--nav-glass-bg, rgba(38, 27, 22, 0.72));
+[theme="dark"] .m3-expressive-dock {
+  background: var(--nav-glass-bg, rgba(38, 27, 22, 0.76));
   border: 1px solid var(--nav-glass-border, rgba(255, 255, 255, 0.12));
   box-shadow: var(--nav-glass-shadow, 0 14px 40px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12));
 }
 
-.m3-nav-destination {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.4rem 0.6rem;
-  color: var(--md-sys-color-on-surface-variant, #52443d);
-  transition: color 200ms ease, transform 150ms ease;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  flex: 1;
-  max-width: 9.5rem;
-}
-
-.m3-nav-destination:active {
-  transform: scale(0.94);
-}
-
-.m3-nav-icon-container {
+/* =============================================================================
+   M3 EXPRESSIVE DOCK ITEMS (ALL PILL SHAPED, NO HOVER EFFECTS)
+   Both inactive and active backgrounds are 100% pill shaped (border-radius: 9999px).
+   Hover effects are completely disabled.
+   ============================================================================= */
+.m3-dock-item {
   position: relative;
-  width: 5.6rem;
-  height: 3rem;
+  width: 5.0rem;
+  height: 4.2rem;
   border-radius: 9999px;
+  border: none;
+  background: rgba(191, 96, 56, 0.11);
+  color: var(--md-sys-color-on-surface-variant, #52443d);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 250ms ease,
-              transform 200ms ease;
+  cursor: pointer;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  transition:
+    width 320ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 320ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 250ms ease,
+    box-shadow 250ms ease,
+    color 200ms ease;
 }
 
-.m3-nav-icon {
-  font-size: 2.2rem;
-  transition: font-variation-settings 200ms ease, transform 200ms ease, color 200ms ease;
+[theme="dark"] .m3-dock-item {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--md-sys-color-on-surface-variant, #d7c2b8);
 }
 
-.m3-nav-label {
-  font-family: var(--font-sans, "Google Sans Flex", "Inter", sans-serif);
-  font-size: 1.15rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  transition: font-weight 200ms ease, color 200ms ease;
-  white-space: nowrap;
+/* Active touch/click feedback */
+.m3-dock-item:active {
+  transform: scale(0.94);
 }
 
-/* Active destination state */
-.m3-nav-destination.selected {
-  color: var(--md-sys-color-on-surface, #221a16);
+/* Active tab: Pill shaped (border-radius: 9999px) with expanded width on mobile */
+.m3-dock-item.active {
+  width: 7.8rem;
+  height: 4.2rem;
+  border-radius: 9999px;
+  background-color: var(--md-sys-color-primary, #bf6038);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(191, 96, 56, 0.38);
 }
 
-.m3-nav-destination.selected .m3-nav-icon-container {
-  background-color: #ffd2b8;
-  box-shadow: 0 2px 6px rgba(191, 96, 56, 0.22);
+[theme="dark"] .m3-dock-item.active {
+  background-color: #c8683f;
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
 }
 
-[theme="dark"] .m3-nav-destination.selected .m3-nav-icon-container {
-  background-color: #723214;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+/* Icon styling */
+.m3-dock-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 250ms ease;
 }
 
-.m3-nav-destination.selected .m3-nav-icon {
-  color: #3b1404;
-  font-variation-settings: "FILL" 1, "wght" 600;
-  transform: scale(1.05);
+.m3-dock-item.active .m3-dock-icon {
+  transform: scale(1.06);
 }
 
-[theme="dark"] .m3-nav-destination.selected .m3-nav-icon {
-  color: #ffdccf;
-  font-variation-settings: "FILL" 1, "wght" 600;
-  transform: scale(1.05);
+/* =============================================================================
+   DESKTOP VIEWPORT (ORIGINAL LEFT-SIDE VERTICAL DOCK POSITION)
+   Dock is anchored to the left: 2rem and vertically centered.
+   ============================================================================= */
+@media (min-width: 769px) {
+  .m3-expressive-dock {
+    left: 2rem;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    padding: 0.8rem 0.6rem;
+    gap: 0.8rem;
+    border-radius: 9999px;
+  }
+
+  .m3-dock-item {
+    width: 4.6rem;
+    height: 4.6rem;
+    border-radius: 9999px;
+  }
+
+  /* Active tab on desktop expands vertically as a pill */
+  .m3-dock-item.active {
+    width: 4.6rem;
+    height: 7.0rem;
+    border-radius: 9999px;
+  }
 }
 
-.m3-nav-destination.selected .m3-nav-label {
-  font-weight: 700;
-  color: var(--md-sys-color-on-surface, #221a16);
-}
-
-[theme="dark"] .m3-nav-destination.selected .m3-nav-label {
-  color: #ede0db;
-}
-
+/* =============================================================================
+   COMPACT MOBILE (< 360PX)
+   ============================================================================= */
 @media (max-width: 360px) {
-  .m3-bottom-nav-bar {
-    width: calc(100% - 2rem);
-    height: 6.4rem;
-    padding: 0 0.4rem;
+  .m3-expressive-dock {
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    height: 5.2rem;
   }
-  .m3-nav-icon-container {
-    width: 4.8rem;
-    height: 2.8rem;
+
+  .m3-dock-item {
+    width: 4.4rem;
+    height: 3.8rem;
   }
-  .m3-nav-icon {
-    font-size: 2rem;
-  }
-  .m3-nav-label {
-    font-size: 1.05rem;
+
+  .m3-dock-item.active {
+    width: 6.8rem;
+    height: 3.8rem;
   }
 }
 </style>

@@ -20,6 +20,8 @@
   "dependencies": {
     "@material/web": "^2.5.0",
     "@octokit/rest": "^20.0.2",
+    "@solar-icons/vue": "^2.2.0",
+    "@tabler/icons-vue": "^3.46.0",
     "marked": "^16.3.0",
     "material-symbols": "^0.36.2",
     "prismjs": "^1.30.0",
